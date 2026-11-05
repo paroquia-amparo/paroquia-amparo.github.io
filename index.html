@@ -281,6 +281,18 @@ body:has(.baixar-app:not([hidden])) .tela{padding-bottom:90px}
 .nav button.tem-aviso{position:relative}
 .nav button.tem-aviso::after{content:"";position:absolute;top:6px;right:calc(50% - 16px);width:10px;height:10px;border-radius:50%;background:#D93025;border:2px solid #fff}
 
+/* bíblia comentada */
+.selo-com{font-style:normal;color:var(--ouro);margin-left:auto;font-size:13px}
+.sub-com{font-family:var(--corpo);font-size:13px;font-weight:800;color:var(--ouro);letter-spacing:.04em;vertical-align:middle}
+.cap-topo{background:linear-gradient(150deg,var(--azul),#123E86);color:#fff;border-radius:20px;padding:18px 18px 16px}
+.cap-topo small{color:var(--ouro2);font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:12.5px}
+.cap-topo h2{font-family:var(--disp);font-size:30px;line-height:1.1;margin:4px 0 0}
+.com-bloco,.luz{margin-top:12px}
+.com-bloco h3,.luz h3{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ouro);margin:0 0 6px}
+.com-bloco p,.luz p{margin:0;line-height:1.6}
+.com-texto{font-family:var(--disp);font-size:1.12em}
+.luz{border-left:5px solid var(--ouro2)}
+
 /* bíblia */
 .livros{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
 .livros button{border:0;background:var(--papel);box-shadow:var(--sombra);border-radius:12px;padding:11px 12px;text-align:left;font-weight:700;font-size:15.5px;display:flex;gap:8px;align-items:baseline}
@@ -1076,7 +1088,7 @@ async function avisoCadastros(caixa){
 
 // ================= BÍBLIA =================
 // Índice dos 73 livros (dados/biblia.json). O texto é o da Bíblia Ave-Maria, que tem direitos autorais:
-// a leitura abre no site Bíblia Católica Online, direto no capítulo ou versículo.
+// a leitura abre no site Bíblia Católica Online, direto no capítulo ou versículo (decisão do Ramon, 05/11/2026).
 let biblia = null;
 async function abrirBiblia(){
   if (biblia) return biblia;
@@ -1095,22 +1107,31 @@ function lerNaAveMaria(l, c, v){
   window.open(linkAveMaria(l, c, v), '_blank', 'noopener');
 }
 
-async function telaBiblia(livroId){
+// Novo Testamento comentado (dados/comentarios.json, fica no aparelho): reflexões escritas à luz de
+// Santo Agostinho, Santa Teresa d'Ávila e do Venerável Fulton Sheen. Sem comentário, o capítulo abre direto na Ave-Maria.
+let comentarios = null;
+async function abrirComentarios(){ if (!comentarios) { try { comentarios = await carregar('comentarios'); } catch(e){ comentarios = {}; } } return comentarios; }
+const temComentario = (l, c) => !!(comentarios && comentarios[l.id] && (c ? comentarios[l.id][c] : true));
+function abrirCapitulo(l, c, v){ if (temComentario(l, c)) ir(`biblia/${l.id}/${c}`); else lerNaAveMaria(l, c, v); }
+
+async function telaBiblia(livroId, capStr){
   topo('Sagrada Escritura','Bíblia');
   app.innerHTML = `<section class="tela"><div class="carregando">Abrindo a Bíblia…</div></section>`;
   try { await abrirBiblia(); } catch(e){ app.innerHTML = `<section class="tela"><div class="aviso erro">Não consegui abrir a Bíblia. Confira a internet.</div></section>`; return; }
+  await abrirComentarios();
   const livro = livroId && biblia.livros.find(l => l.id === livroId);
+  if (livro && capStr) return telaCapitulo(livro, Math.min(+capStr || 1, livro.caps));
   if (livro) return capitulos(livro);
   const ult = ler('ultimaLeitura', null); const lu = ult && biblia.livros.find(l => l.id === ult.livro);
-  const grupo = t => biblia.livros.filter(l => l.t === t).map(l => `<button data-id="${l.id}"><small>${esc(l.abrev)}</small>${esc(l.nome)}</button>`).join('');
+  const grupo = t => biblia.livros.filter(l => l.t === t).map(l => `<button data-id="${l.id}"><small>${esc(l.abrev)}</small>${esc(l.nome)}${temComentario(l) ? '<i class="selo-com" title="Comentado">✦</i>' : ''}</button>`).join('');
   app.innerHTML = `<section class="tela">
     <form class="busca" id="fb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
       <input class="campo" id="qb" type="search" placeholder="Ir para: Jo 3,16 · Salmo 23 · 1Cor 13" aria-label="Ir para passagem"></form>
     <p class="pequeno" id="qmsg" style="color:var(--erro);margin:6px 0 0"></p>
     ${lu ? `<button class="item" id="cont" style="margin-top:12px"><div class="ini">↺</div><div><b>Continuar leitura</b><span>${esc(lu.nome)} ${ult.cap}${ult.cap < lu.caps ? ' · próximo: '+(ult.cap+1) : ''}</span></div></button>` : ''}
     <h2 class="titulo-sec">Antigo Testamento</h2><div class="livros">${grupo('AT')}</div>
-    <h2 class="titulo-sec">Novo Testamento</h2><div class="livros">${grupo('NT')}</div>
-    <p class="fonte">Leitura na Bíblia Ave-Maria, pelo site Bíblia Católica Online (abre fora do app; precisa de internet).</p>
+    <h2 class="titulo-sec">Novo Testamento <span class="sub-com">✦ comentado</span></h2><div class="livros">${grupo('NT')}</div>
+    <p class="fonte">Leitura na Bíblia Ave-Maria, pelo site Bíblia Católica Online (abre fora do app; precisa de internet). Os comentários do Novo Testamento ficam no aparelho e funcionam sem internet.</p>
   </section>`;
   app.querySelectorAll('.livros button').forEach(b => b.onclick = () => ir('biblia/'+b.dataset.id));
   const c = $('#cont'); if (c) c.onclick = () => ir('biblia/'+ult.livro);
@@ -1121,17 +1142,46 @@ async function telaBiblia(livroId){
     if (!l) { $('#qmsg').textContent = 'Não reconheci o livro. Ex.: Jo 3,16 ou Salmo 23'; return; }
     $('#qmsg').textContent = '';
     if (!m[2]) return ir('biblia/'+l.id);
-    const cap = Math.min(+m[2], l.caps); lerNaAveMaria(l, cap, +m[3] || 0);
+    abrirCapitulo(l, Math.min(+m[2], l.caps), +m[3] || 0);
   };
 }
 
 function capitulos(l){
   topo('Bíblia', l.nome);
-  const ult = ler('ultimaLeitura', null);
+  const ult = ler('ultimaLeitura', null), com = temComentario(l);
   app.innerHTML = `<section class="tela"><h2 class="titulo-sec" style="margin-top:0">${esc(l.nome)}</h2>
-    <p class="mudo" style="margin-top:-4px">${l.caps} capítulo${l.caps>1?'s':''} · toque para ler na Bíblia Ave-Maria</p>
+    <p class="mudo" style="margin-top:-4px">${l.caps} capítulo${l.caps>1?'s':''} · ${com ? 'toque para ver o comentário e ler na Bíblia Ave-Maria' : 'toque para ler na Bíblia Ave-Maria'}</p>
     <div class="caps">${Array.from({length:l.caps},(_,i)=>`<button${ult && ult.livro===l.id && ult.cap===i+1 ? ' style="background:var(--azul);color:#fff"' : ''}>${i+1}</button>`).join('')}</div></section>`;
-  app.querySelectorAll('.caps button').forEach(b => b.onclick = () => { lerNaAveMaria(l, +b.textContent); capitulos(l); });
+  app.querySelectorAll('.caps button').forEach(b => b.onclick = () => { if (com) return abrirCapitulo(l, +b.textContent); lerNaAveMaria(l, +b.textContent); capitulos(l); });
+}
+
+let tamCom = ler('tamCom', 18);
+function telaCapitulo(l, c){
+  const k = (comentarios[l.id] || {})[c];
+  if (!k) { lerNaAveMaria(l, c); return capitulos(l); }
+  topo(l.nome, `${l.nome} ${c}`);
+  guardar('ultimaLeitura', {livro: l.id, cap: c});
+  const ant = c > 1 ? c - 1 : 0, prox = c < l.caps ? c + 1 : 0;
+  app.innerHTML = `<section class="tela">
+    <div class="cap-topo"><small>${esc(l.nome)} · capítulo ${c}</small><h2>${esc(k.tema || '')}</h2></div>
+    <button class="btn ouro grande-btn" id="lerCap" style="margin-top:12px">📖 Ler ${esc(l.abrev)} ${c} na Bíblia Ave-Maria</button>
+    <div class="tamanho" style="margin-top:12px"><button id="menos" aria-label="Diminuir letra">A−</button><button id="mais" aria-label="Aumentar letra">A+</button></div>
+    <div id="comTxt" style="font-size:${tamCom}px">
+      <article class="cartao com-bloco"><h3>Resumo</h3><p>${esc(k.resumo || '')}</p></article>
+      <article class="cartao com-bloco"><h3>Comentário</h3><p class="com-texto">${esc(k.comentario || '')}</p></article>
+      ${(k.luzes || []).map(z => `<article class="cartao luz"><h3>À luz de ${esc(z.autor)}</h3><p>${esc(z.texto)}</p></article>`).join('')}
+    </div>
+    <div class="passa"><button class="btn claro" id="ant" ${ant ? '' : 'disabled'}>‹ ${ant ? esc(l.abrev) + ' ' + ant : ''}</button>
+      <button class="btn claro" id="caps">Capítulos</button>
+      <button class="btn claro" id="prox" ${prox ? '' : 'disabled'}>${prox ? esc(l.abrev) + ' ' + prox : ''} ›</button></div>
+    <p class="fonte">Comentários escritos pela equipe do app à luz do pensamento de Santo Agostinho, Santa Teresa d'Ávila e do Venerável Fulton Sheen; não são citações das obras deles.</p>
+  </section>`;
+  $('#lerCap').onclick = () => lerNaAveMaria(l, c);
+  if (ant) $('#ant').onclick = () => ir(`biblia/${l.id}/${ant}`);
+  if (prox) $('#prox').onclick = () => ir(`biblia/${l.id}/${prox}`);
+  $('#caps').onclick = () => ir('biblia/' + l.id);
+  const ajusta = n => { tamCom = Math.max(15, Math.min(28, tamCom + n)); guardar('tamCom', tamCom); $('#comTxt').style.fontSize = tamCom + 'px'; };
+  $('#menos').onclick = () => ajusta(-2); $('#mais').onclick = () => ajusta(2);
 }
 
 // ================= PASTORAL DO DÍZIMO =================
