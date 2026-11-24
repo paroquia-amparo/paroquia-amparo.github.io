@@ -769,8 +769,8 @@ async function servidor(acao, dados={}){
 
 // ---------- sessão (PIN) ----------
 let sessao = ler('sessao', {pin:'', papel:''});
-const NOME_PAPEL = {padre: 'Padre', dizimo: 'Pastoral do Dízimo', pascom: 'Pascom'};
-const ehDizimo = () => ['dizimo','padre'].includes(sessao.papel);
+const NOME_PAPEL = {padre: 'Padre', dizimo: 'Pastoral do Dízimo', pascom: 'Pascom', master: 'Master'};
+const ehDizimo = () => ['dizimo','padre','master'].includes(sessao.papel);
 function atualizarNav(){
   $('#navPastoral').hidden = !sessao.papel;
   $('#latOla').textContent = sessao.papel ? 'Olá, ' + (NOME_PAPEL[sessao.papel] || sessao.papel) + '!' : 'Seja bem-vindo!';
@@ -854,7 +854,7 @@ function seletorData(d, mudar){
 async function telaInicio(){
   topo('Paróquia','Nossa Senhora do Amparo');
   const insp = ler('inspiracao', '');
-  const podePascom = ['pascom','padre','dizimo'].includes(sessao.papel);
+  const podePascom = ['pascom','padre','dizimo','master'].includes(sessao.papel);
   app.innerHTML = `<section class="tela">
     <div id="avisosPascom"></div>
     ${avisosDaSemana()}
@@ -872,7 +872,7 @@ async function telaInicio(){
       <blockquote id="inspTexto">${esc(insp || 'Vinde a mim, todos vós que estais cansados e sobrecarregados, e eu vos aliviarei.')}</blockquote>
       <div class="assin" id="inspAssin" ${insp ? '' : 'hidden'}>— ${esc(ASSINATURA)}</div>
     </div>
-    ${sessao.papel === 'padre' ? `<div class="cartao editor" style="margin-top:12px">
+    ${['padre','master'].includes(sessao.papel) ? `<div class="cartao editor" style="margin-top:12px">
       <label for="inspNova"><b>Nova inspiração</b> <span class="mudo pequeno">(aparece para todos no topo do app)</span></label>
       <textarea id="inspNova" class="campo" maxlength="600" placeholder="Escreva a frase de hoje, Padre…">${esc(insp)}</textarea>
       <div class="linha"><button class="btn ouro" id="inspSalvar">Publicar inspiração</button><span class="mudo pequeno" id="inspMsg"></span></div>
@@ -967,7 +967,7 @@ function desenhaAvisosPascom(lista){
   const el = $('#avisosPascom'); if (!el) return;
   lista = lista || [];
   if (!lista.length) { el.innerHTML = ''; return; }
-  const pode = ['pascom','padre','dizimo'].includes(sessao.papel);
+  const pode = ['pascom','padre','dizimo','master'].includes(sessao.papel);
   el.innerHTML = `<div class="avisos-pascom"><div class="rot">🔔 Avisos da paróquia</div>${lista.map(a => `<div class="ap ${esc(a.categoria)}"><div class="aviso-ic">${ICONE_AVISO[a.categoria] || '🔔'}</div><div style="flex:1;min-width:0">
       <b>${esc(a.titulo)}</b>${a.texto ? `<p>${esc(a.texto)}</p>` : ''}<small>${a.data ? 'Publicado em ' + new Date(a.data).toLocaleDateString('pt-BR') : ''}${a.ate ? ' · até ' + a.ate.split('-').reverse().slice(0,2).join('/') : ''}</small>
       ${pode ? `<div class="acoes"><button data-apagar="${esc(a.id)}">Tirar do app</button></div>` : ''}</div></div>`).join('')}</div>`;
@@ -982,7 +982,7 @@ const TIPOS_HORARIO = ['Missa','Confissão','Adoração','Terço','Secretaria'];
 function desenhaHorarios(lista, editar){
   const el = $('#horarios'); if (!el) return;
   lista = lista || [];
-  const pode = ['pascom','padre','dizimo'].includes(sessao.papel);
+  const pode = ['pascom','padre','dizimo','master'].includes(sessao.papel);
   if (!lista.length && !pode) { el.innerHTML = ''; return; }
   if (editar) {
     const linha = h => `<div class="hed"><select class="campo">${TIPOS_HORARIO.map(t => `<option ${t === h.tipo ? 'selected' : ''}>${t}</option>`).join('')}</select>
@@ -1955,9 +1955,35 @@ async function telaVitrine(){
   };
 }
 
+// ================= TROCAR PIN (cada acesso troca o seu; o Master troca qualquer um) =================
+function campoTrocarPin(el){
+  const master = sessao.papel === 'master';
+  el.innerHTML = `<h2>🔑 ${master ? 'Trocar PINs' : 'Trocar meu PIN'}</h2>
+    <form class="cartao form" id="ftp">
+      ${master ? `<label>De qual acesso?<select class="campo" id="tpAlvo"><option value="master">Master (o seu)</option><option value="padre">Padre</option><option value="dizimo">Pastoral do Dízimo</option><option value="pascom">Pascom</option></select></label>` : `<p class="mudo" style="margin:0">Você está como <b>${esc(NOME_PAPEL[sessao.papel] || '')}</b>. O PIN novo vale na hora, para todos que usam este acesso.</p>`}
+      <label>PIN novo<input class="campo" id="tpNovo" type="password" minlength="4" maxlength="40" autocomplete="new-password" required></label>
+      <label>Repita o PIN novo<input class="campo" id="tpNovo2" type="password" minlength="4" maxlength="40" autocomplete="new-password" required></label>
+      <button class="btn ouro grande-btn">Trocar PIN</button>
+      <p class="pequeno mudo" style="margin:0">Use de 4 a 40 letras ou números. Não use o mesmo PIN de outro acesso.</p></form>`;
+  $('#ftp').onsubmit = async ev => {
+    ev.preventDefault();
+    const novo = $('#tpNovo').value.trim(), alvo = master ? $('#tpAlvo').value : '';
+    if (novo !== $('#tpNovo2').value.trim()) return toast('Os dois PINs novos não são iguais');
+    if (!confirm(master && alvo !== 'master' ? `Trocar o PIN de ${NOME_PAPEL[alvo]}? Quem usa esse acesso vai precisar do PIN novo.` : 'Trocar o seu PIN agora?')) return;
+    const b = ev.submitter; b.disabled = true;
+    try {
+      const j = await servidor('trocarPin', {novo, alvo});
+      if (j.proprio) { sessao = {pin: novo, papel: sessao.papel}; guardar('sessao', sessao); }
+      $('#ftp').reset(); toast(j.proprio ? 'Seu PIN foi trocado. Use o novo da próxima vez.' : `PIN de ${NOME_PAPEL[j.alvo]} trocado.`);
+    } catch(e){ toast(e.message); }
+    b.disabled = false;
+  };
+}
+
 // ================= EQUIPE: sugestões e vitrine para aprovar =================
 async function secoesEquipe(caixa){
-  caixa.innerHTML = `<div class="secao-equipe" id="eqVitrine"></div><div class="secao-equipe" id="eqSug"></div>`;
+  caixa.innerHTML = `<div class="secao-equipe" id="eqVitrine"></div><div class="secao-equipe" id="eqSug"></div><div class="secao-equipe" id="eqPin"></div>`;
+  campoTrocarPin($('#eqPin'));
   const vit = lista => { const pend = lista.filter(a => !a.aprovado);
     $('#eqVitrine').innerHTML = `<h2>🏪 Vitrine: anúncios para conferir</h2>${pend.length ? pend.map(a => `<div class="item-equipe novo"><b>${esc(a.negocio)}</b><span>${esc(a.categoria)} · ${esc(a.nome)} · ${esc(a.telefone)}${a.instagram ? ' · @' + esc(a.instagram) : ''}</span>${a.descricao ? `<span class="mudo">${esc(a.descricao)}</span>` : ''}
       <div class="acoes"><button class="btn" data-ok="${esc(a.id)}">Aprovar</button><button class="btn claro" data-no="${esc(a.id)}">Recusar</button></div></div>`).join('') : '<p class="mudo">Nenhum anúncio esperando.</p>'}
