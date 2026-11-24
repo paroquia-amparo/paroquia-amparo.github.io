@@ -1,4 +1,4 @@
-const C='amparo-202611240656';
+const C='amparo-202611240702';
 const A=["./", "index.html", "manifest.webmanifest", "icons/icon-192.png", "dados/santos.json", "dados/novenas.json", "dados/biblia.json", "dados/oracoes.json", "dados/devocionarios.json", "dados/comentarios.json", "dados/tercos.json", "dados/exame.json", "img/fundo.jpg", "img/aparecida.png", "img/amparo.png"];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(A)));self.skipWaiting()});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==C).map(x=>caches.delete(x)))));self.clients.claim()});
