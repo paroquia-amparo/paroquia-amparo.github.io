@@ -1,0 +1,207 @@
+{
+ "titulo": "Exame de consciência",
+ "intro": "Antes de se confessar, reserve alguns minutos de silêncio. Não tenha medo nem vergonha: Deus é Pai e espera por você com alegria, como o pai do filho pródigo. Leia as perguntas com calma, sem pressa e sem angústia. Não é preciso responder a todas; fique com aquilo que tocar o seu coração. O mais importante é o arrependimento sincero e a vontade de recomeçar.",
+ "oracaoAntes": "Vinde, Espírito Santo, iluminai a minha mente e o meu coração. Ajudai-me a reconhecer os meus pecados com sinceridade, sem desculpas e sem desespero. Dai-me a dor verdadeira de ter ofendido a Deus, que é tão bom, e a coragem de confessar tudo com humildade.\n\nVirgem Maria, refúgio dos pecadores, Nossa Senhora do Amparo, segurai a minha mão neste momento. Meu Anjo da Guarda, ajudai-me a lembrar o que preciso confessar. Amém.",
+ "partes": [
+  {
+   "titulo": "1º Mandamento – Amar a Deus sobre todas as coisas",
+   "intro": "Deus em primeiro lugar na minha vida.",
+   "perguntas": [
+    "Tenho rezado todos os dias, ou deixei a oração de lado?",
+    "Duvidei da fé ou neguei a minha fé por vergonha ou medo?",
+    "Coloquei o dinheiro, o trabalho, a saúde ou outra pessoa acima de Deus?",
+    "Recorri a cartomantes, benzedeiras de outras crenças, simpatias, horóscopo, centros espíritas ou terreiros?",
+    "Usei amuletos ou objetos por superstição, como se tivessem poder?",
+    "Desesperei da misericórdia de Deus, achando que Ele não poderia me perdoar?",
+    "Recebi a Comunhão em pecado grave, sem me confessar antes?",
+    "Escondi de propósito algum pecado grave numa confissão anterior?"
+   ]
+  },
+  {
+   "titulo": "2º Mandamento – Não tomar seu santo nome em vão",
+   "intro": "Respeitar o nome de Deus e as coisas sagradas.",
+   "perguntas": [
+    "Usei o nome de Deus, de Nossa Senhora ou dos santos com raiva ou por brincadeira?",
+    "Jurei falso ou jurei sem necessidade?",
+    "Fiz promessas a Deus e não cumpri, podendo cumprir?",
+    "Falei palavrões ou blasfêmias contra Deus ou a Igreja?",
+    "Zombei da religião, dos padres ou de pessoas de fé?",
+    "Tratei com desrespeito a igreja, imagens, a Bíblia ou objetos bentos?"
+   ]
+  },
+  {
+   "titulo": "3º Mandamento – Guardar domingos e festas",
+   "intro": "O domingo é o dia do Senhor.",
+   "perguntas": [
+    "Faltei à Missa no domingo ou dia santo de guarda sem motivo sério (como doença ou cuidado de um doente)?",
+    "Cheguei atrasado ou saí antes do fim da Missa sem necessidade?",
+    "Participei da Missa distraído de propósito, sem respeito?",
+    "Fiz trabalhos desnecessários no domingo, impedindo o descanso meu ou de outros?",
+    "Não podendo ir à Missa por doença, deixei de rezar ou de acompanhar a Missa pela TV ou rádio?",
+    "Dediquei o domingo também à família, ao descanso e às obras de caridade?"
+   ]
+  },
+  {
+   "titulo": "4º Mandamento – Honrar pai e mãe",
+   "intro": "Respeito e cuidado na família e com as autoridades.",
+   "perguntas": [
+    "Tratei meus pais com desprezo, grosseria ou ingratidão?",
+    "Abandonei ou deixei de cuidar dos meus pais ou parentes idosos e doentes?",
+    "Fui exigente demais, impaciente ou injusto com filhos, netos ou quem cuida de mim?",
+    "Descuidei da educação na fé dos meus filhos e netos, ou dei mau exemplo?",
+    "Guardei mágoa ou rancor de alguém da família, sem querer perdoar?",
+    "Desrespeitei as autoridades legítimas ou deixei de cumprir os meus deveres de cidadão?"
+   ]
+  },
+  {
+   "titulo": "5º Mandamento – Não matar",
+   "intro": "Respeitar a vida, a saúde e a paz.",
+   "perguntas": [
+    "Feri alguém com palavras, gestos ou agressões?",
+    "Desejei o mal ou a morte de alguém?",
+    "Guardei ódio ou me neguei a perdoar?",
+    "Pratiquei, aconselhei ou ajudei alguém a fazer um aborto?",
+    "Descuidei da minha saúde, bebi em excesso, usei drogas ou dirigi de modo perigoso?",
+    "Pensei em tirar a minha vida e não pedi ajuda? (Se for o seu caso, procure ajuda: Deus quer a sua vida.)",
+    "Fui causa de brigas, escândalos ou levei alguém a pecar?"
+   ]
+  },
+  {
+   "titulo": "6º Mandamento – Não pecar contra a castidade",
+   "intro": "Viver o amor e o corpo como dom de Deus.",
+   "perguntas": [
+    "Fui infiel ao meu esposo ou à minha esposa, em atos ou em desejos?",
+    "Tive relações fora do matrimônio?",
+    "Vi revistas, filmes, vídeos ou imagens impróprias, inclusive pela internet ou pelo celular?",
+    "Pratiquei atos impuros sozinho ou com outra pessoa?",
+    "Falei ou ouvi com gosto conversas e piadas indecentes?",
+    "Faltei com o respeito e o carinho devidos no casamento?"
+   ]
+  },
+  {
+   "titulo": "7º Mandamento – Não furtar",
+   "intro": "Honestidade com os bens próprios e alheios.",
+   "perguntas": [
+    "Peguei algo que não era meu, ou fiquei com troco ou objeto achado sem procurar o dono?",
+    "Deixei de pagar dívidas, contas ou salários que eu podia pagar?",
+    "Enganei alguém em compras, vendas, documentos ou benefícios?",
+    "Estraguei bens de outras pessoas ou bens públicos?",
+    "Fui desonesto no trabalho, faltando ou fazendo mal o serviço?",
+    "Gastei em jogos de azar ou em coisas supérfluas o que faltava em casa?",
+    "Fui indiferente aos pobres, podendo ajudar?"
+   ]
+  },
+  {
+   "titulo": "8º Mandamento – Não levantar falso testemunho",
+   "intro": "Amar a verdade e proteger o bom nome dos outros.",
+   "perguntas": [
+    "Menti para me livrar de algo ou para tirar vantagem?",
+    "Falei mal da vida dos outros, fiz fofoca ou espalhei boatos?",
+    "Inventei ou aumentei defeitos de alguém (calúnia)?",
+    "Contei segredos que me foram confiados?",
+    "Compartilhei notícias falsas ou mensagens que difamam pessoas?",
+    "Julguei os outros sem conhecer a verdade?"
+   ]
+  },
+  {
+   "titulo": "9º Mandamento – Não desejar a mulher do próximo",
+   "intro": "Pureza do coração e dos pensamentos.",
+   "perguntas": [
+    "Alimentei de propósito pensamentos ou desejos impuros?",
+    "Desejei a esposa ou o esposo de outra pessoa?",
+    "Procurei situações que me levavam à tentação?",
+    "Cuidei do que vejo, ouço e leio, para guardar o coração?",
+    "Me vesti ou me comportei de modo a provocar outras pessoas?"
+   ]
+  },
+  {
+   "titulo": "10º Mandamento – Não cobiçar as coisas alheias",
+   "intro": "Contentar-se com o que Deus dá e alegrar-se com o bem dos outros.",
+   "perguntas": [
+    "Tive inveja do que os outros têm: casa, dinheiro, saúde, família?",
+    "Fiquei triste com o sucesso ou a alegria de alguém?",
+    "Vivi apegado ao dinheiro e aos bens, com medo de partilhar?",
+    "Reclamei de Deus por aquilo que não tenho, em vez de agradecer?",
+    "Desejei tirar de alguém o que é dele, por meios injustos?"
+   ]
+  },
+  {
+   "titulo": "Mandamentos da Igreja",
+   "intro": "O mínimo que a Igreja pede para vivermos como filhos de Deus.",
+   "perguntas": [
+    "Participei da Missa inteira aos domingos e dias santos de guarda?",
+    "Confessei-me ao menos uma vez por ano?",
+    "Comunguei ao menos uma vez no tempo da Páscoa?",
+    "Fiz jejum e abstinência de carne na Quarta-feira de Cinzas e na Sexta-feira Santa, quando a saúde e a idade permitem?",
+    "Fiz alguma penitência nas sextas-feiras, como pede a Igreja?",
+    "Ajudei a Igreja em suas necessidades, com o dízimo e com o meu serviço, conforme as minhas possibilidades?"
+   ]
+  },
+  {
+   "titulo": "Pecados capitais",
+   "intro": "As raízes de onde nascem os outros pecados.",
+   "perguntas": [
+    "Soberba: fui orgulhoso, achei-me melhor que os outros ou não aceitei correção?",
+    "Avareza: fui apegado ao dinheiro, mesquinho ou sem generosidade?",
+    "Luxúria: deixei-me dominar por desejos impuros?",
+    "Ira: perdi a paciência, gritei, briguei ou guardei raiva?",
+    "Gula: comi ou bebi em excesso, sem moderação?",
+    "Inveja: entristeci-me com o bem dos outros?",
+    "Preguiça: fui negligente com a oração, com o trabalho ou com os meus deveres?"
+   ]
+  },
+  {
+   "titulo": "Deveres do meu estado (pais, filhos, esposos, trabalho)",
+   "intro": "Como tenho vivido a missão que Deus me confiou.",
+   "perguntas": [
+    "Como esposo ou esposa: fui fiel, paciente e carinhoso? Soube pedir e dar perdão?",
+    "Como pai, mãe, avô ou avó: ensinei a fé com palavras e exemplo, rezei pela família, corrigi com amor?",
+    "Como filho ou filha: honrei, ajudei e visitei meus pais, especialmente na velhice e na doença?",
+    "No trabalho ou na aposentadoria: fui honesto, responsável e justo com quem trabalha para mim ou comigo?",
+    "Como viúvo, viúva ou pessoa só: deixei-me levar pela tristeza ou isolamento, em vez de confiar em Deus e buscar a comunidade?",
+    "Na doença ou nas limitações da idade: aceitei com paciência, ou me revoltei contra Deus e contra os outros?",
+    "Na comunidade: colaborei com a paróquia, visitei doentes, ajudei quem precisava?"
+   ]
+  }
+ ],
+ "comoConfessar": [
+  {
+   "titulo": "1. Prepare-se",
+   "texto": "Faça o exame de consciência com calma, peça a luz do Espírito Santo e arrependa-se de coração. Se tiver medo de esquecer, pode anotar os pecados num papel e levá-lo à confissão."
+  },
+  {
+   "titulo": "2. Saudação",
+   "texto": "Ao chegar diante do padre, faça o sinal da cruz. Você pode dizer: \"Abençoe-me, padre, porque pequei\". O padre o acolherá e poderá dizer uma palavra de confiança em Deus."
+  },
+  {
+   "titulo": "3. Diga há quanto tempo se confessou",
+   "texto": "Conte quando foi a sua última confissão, mesmo que aproximadamente: \"Minha última confissão foi há mais ou menos seis meses\". Se quiser, diga também algo sobre a sua situação (casado, viúvo, doente), para o padre poder ajudá-lo melhor."
+  },
+  {
+   "titulo": "4. Confesse os seus pecados",
+   "texto": "Diga os pecados com simplicidade e sinceridade, sem rodeios e sem precisar de detalhes desnecessários. Os pecados graves devem ser ditos todos, com o número aproximado de vezes. Ao terminar, você pode dizer: \"Destes e de todos os pecados da minha vida, peço perdão a Deus\". Se tiver dúvida, pergunte ao padre: ele está ali para ajudar."
+  },
+  {
+   "titulo": "5. Ouça o conselho",
+   "texto": "O padre poderá dar uma orientação ou uma palavra de ânimo. Escute com atenção e abertura: é Jesus quem fala ao seu coração por meio dele."
+  },
+  {
+   "titulo": "6. Receba a penitência",
+   "texto": "O padre indicará uma penitência: uma oração, uma leitura ou uma boa obra. Ela é sinal da vontade de reparar o mal e de mudar de vida. Se não entender ou não puder cumprir, diga ao padre."
+  },
+  {
+   "titulo": "7. Reze o Ato de Contrição",
+   "texto": "O padre pedirá que você manifeste o seu arrependimento. Reze o Ato de Contrição (veja o texto abaixo). Se não souber de cor, pode ler ou dizer com as suas palavras: \"Meu Deus, eu me arrependo de todo o coração\"."
+  },
+  {
+   "titulo": "8. Receba a absolvição",
+   "texto": "O padre estenderá a mão e dirá as palavras da absolvição, terminando com: \"...Eu te absolvo dos teus pecados, em nome do Pai, e do Filho, e do Espírito Santo\". Faça o sinal da cruz e responda: \"Amém\". Neste momento, Deus perdoa de verdade todos os seus pecados. O padre pode concluir: \"Vai em paz\". Responda: \"Graças a Deus\"."
+  },
+  {
+   "titulo": "9. Cumpra a penitência e agradeça",
+   "texto": "Logo que puder, cumpra a penitência. Reserve um momento para agradecer a Deus pelo perdão e recomeçar com alegria. Lembre-se: o segredo da confissão é absoluto; o padre nunca pode revelar o que ouviu."
+  }
+ ],
+ "atoContricao": "Senhor meu, Jesus Cristo, Deus e Homem verdadeiro, Criador e Redentor meu, por serdes vós quem sois, sumamente bom e digno de ser amado sobre todas as coisas, e porque vos amo e estimo, pesa-me, Senhor, de todo o meu coração, de vos ter ofendido; e proponho firmemente, ajudado com os auxílios da vossa divina graça, emendar-me e nunca mais vos tornar a ofender. Espero alcançar o perdão das minhas culpas pela vossa infinita misericórdia. Amém.\n\nOu, de forma mais breve:\n\nMeu Deus, eu me arrependo de todo o coração de vos ter ofendido, porque sois tão bom e amável. Prometo, com a vossa graça, esforçar-me para ser bom. Meu Jesus, misericórdia!",
+ "oracaoDepois": "Senhor Jesus, obrigado pelo vosso perdão. Vós me recebestes como o pai recebe o filho que volta para casa, sem me humilhar e sem lembrar o meu passado. Lavai o meu coração e conservai em mim a graça que acabei de receber.\n\nDai-me forças para cumprir a minha penitência, para evitar as ocasiões de pecado e para reparar o mal que eu fiz. Ensinai-me a perdoar como fui perdoado.\n\nVirgem Maria, Nossa Senhora do Amparo, guardai-me sob o vosso manto e ajudai-me a perseverar no bem até o fim da minha vida. Amém."
+}

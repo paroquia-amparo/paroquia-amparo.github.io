@@ -32,7 +32,10 @@
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
-html,body{background:var(--creme);color:var(--tinta)}
+html{background:var(--creme)} body{background:transparent;color:var(--tinta)}
+/* fundo: Nossa Senhora em azul e ouro (fixo, atrás de tudo; os cartões continuam legíveis por cima) */
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:#fff url("img/fundo.jpg") center bottom/cover no-repeat;opacity:.38}
+@media (min-width:700px){body::before{background-size:contain}}
 body{margin:0;font-family:var(--corpo);font-size:17px;line-height:1.5;-webkit-font-smoothing:antialiased;
   padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
 button,input,select,textarea{font:inherit;color:inherit}
@@ -345,8 +348,317 @@ body:has(.baixar-app:not([hidden])) .tela{padding-bottom:90px}
 .status.erro{background:var(--errobg);color:var(--erro)}
 .status.aguarda{background:var(--azulbg);color:var(--azul)}
 
+/* avisos da Pascom (sempre no topo do início) */
+.avisos-pascom{display:grid;gap:12px;margin-bottom:16px}
+.avisos-pascom > .rot,.rot-sec{font-size:13px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--ouro);display:flex;align-items:center;gap:8px}
+.ap{background:var(--papel);border-radius:20px;padding:16px;box-shadow:var(--sombra);border-left:6px solid var(--azul2);display:flex;gap:12px}
+.ap.missa{border-left-color:#6A3D9A}.ap.confissao{border-left-color:#2F7A4F}.ap.evento{border-left-color:var(--ouro)}.ap.pastoral{border-left-color:#C0392B}
+.ap .aviso-ic{font-size:28px}
+.ap b{display:block;font-family:var(--disp);font-size:24px;color:var(--azul);line-height:1.15}
+.ap p{margin:4px 0 0;font-size:16px;white-space:pre-line}
+.ap small{display:block;color:var(--fraco);font-size:12.5px;margin-top:6px}
+.ap .acoes{display:flex;gap:8px;margin-top:8px}
+.ap .acoes button{border:0;background:var(--azulbg);color:var(--azul);border-radius:10px;padding:6px 12px;font-weight:800;font-size:14px}
+.horarios{background:var(--papel);border-radius:20px;box-shadow:var(--sombra);padding:16px 18px;margin-top:16px}
+.horarios h2{font-family:var(--disp);font-size:26px;color:var(--azul);margin:0 0 8px}
+.hgrupo{margin-top:8px}
+.hgrupo h3{margin:6px 0 4px;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--ouro)}
+.hlinha{display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px solid var(--linha);font-size:16px}
+.hlinha:last-child{border-bottom:0}
+.hlinha b{white-space:nowrap;color:var(--azul)}
+.hed{display:grid;grid-template-columns:1.1fr 1.3fr 1fr 1.3fr 36px;gap:6px;margin-bottom:6px}
+.hed .campo{padding:8px 8px;font-size:14px;border-radius:10px}
+.hed button{border:0;background:var(--errobg);color:var(--erro);border-radius:10px;font-weight:800}
+
+/* convite grande para ativar notificações (1º acesso) */
+.convite{max-width:460px;text-align:center;padding:26px 22px}
+.convite .sino{font-size:64px;line-height:1;animation:balanca 1.6s ease-in-out infinite;display:inline-block;transform-origin:50% 10%}
+@keyframes balanca{0%,100%{transform:rotate(0)}20%{transform:rotate(14deg)}40%{transform:rotate(-12deg)}60%{transform:rotate(6deg)}80%{transform:rotate(-3deg)}}
+.convite h2{font-family:var(--disp);font-size:32px;color:var(--azul);margin:10px 0 6px;line-height:1.1}
+.convite p{font-size:17px;margin:0 0 16px}
+.convite .depois{border:0;background:none;color:var(--mudo);font-weight:700;margin-top:10px;padding:8px}
+.alerta-grande{max-width:460px;text-align:center;padding:24px 20px}
+.alerta-grande .ic{font-size:56px;line-height:1}
+.alerta-grande h2{font-family:var(--disp);font-size:30px;color:var(--azul);margin:8px 0}
+.alerta-grande ol{text-align:left;font-size:17px;padding-left:22px;margin:8px 0 16px}
+.alerta-grande li{margin:6px 0}
+
+/* velas */
+.velas-topo{background:radial-gradient(ellipse at 50% 100%,#3a2a10 0%,#120d06 70%);color:#F6E7C1;border-radius:24px;padding:22px 18px;text-align:center;position:relative;overflow:hidden}
+.velas-topo h2{font-family:var(--disp);font-size:32px;margin:0 0 4px;color:#FFE2A0}
+.velas-topo p{margin:0;opacity:.85}
+.vela{position:relative;width:46px;height:120px;margin:0 auto}
+.vela .corpo{position:absolute;bottom:0;left:6px;width:34px;height:84px;border-radius:6px 6px 4px 4px;background:linear-gradient(90deg,#e9dcc0,#fffaf0 45%,#d8c9a6)}
+.vela.v7 .corpo{height:100px;background:linear-gradient(90deg,#c9a54a,#f6dc8c 45%,#b48a35)}
+.vela .pavio{position:absolute;left:22px;width:2px;height:10px;background:#3a2a14;bottom:84px}
+.vela.v7 .pavio{bottom:100px}
+.vela .chama{position:absolute;left:13px;width:20px;height:34px;bottom:90px;border-radius:50% 50% 45% 45%/60% 60% 40% 40%;
+  background:radial-gradient(ellipse at 50% 75%,#fff 0%,#fff6b0 25%,#ffb300 55%,rgba(255,90,0,.0) 75%);filter:blur(.4px);transform-origin:50% 100%;animation:chama 1.4s ease-in-out infinite alternate}
+.vela.v7 .chama{bottom:106px}
+.vela .halo{position:absolute;left:-30px;right:-30px;bottom:70px;height:100px;border-radius:50%;background:radial-gradient(circle,rgba(255,200,80,.45),transparent 65%);animation:halo 2.2s ease-in-out infinite alternate}
+.vela.v7 .halo{bottom:86px}
+@keyframes chama{0%{transform:scale(1,1) rotate(-2deg)}35%{transform:scale(.94,1.06) rotate(2deg)}70%{transform:scale(1.04,.95) rotate(-1deg)}100%{transform:scale(.97,1.04) rotate(1.5deg)}}
+@keyframes halo{from{opacity:.6;transform:scale(.95)}to{opacity:1;transform:scale(1.06)}}
+.altar{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;margin-top:16px}
+.pedido-vela{background:linear-gradient(180deg,#1a130a,#2a1e0e);border-radius:18px;padding:14px 10px 12px;text-align:center;color:#F6E7C1;box-shadow:var(--sombra)}
+.pedido-vela .tipo{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#E3C27A;margin-top:6px}
+.pergaminho{position:relative;margin-top:10px;padding:16px 14px 18px;color:#3b2a12;font-family:var(--disp);font-style:italic;font-size:18px;line-height:1.35;text-align:center;
+  background:radial-gradient(ellipse at 30% 20%,rgba(255,255,255,.35),transparent 60%),radial-gradient(ellipse at 80% 90%,rgba(120,80,30,.25),transparent 55%),linear-gradient(180deg,#f3e2b8,#e6cc92 60%,#d9b877);
+  border-radius:6px;box-shadow:inset 0 0 18px rgba(110,70,20,.45),0 3px 8px rgba(0,0,0,.35);word-wrap:break-word}
+.pergaminho::before,.pergaminho::after{content:"";position:absolute;left:-6px;right:-6px;height:12px;border-radius:8px;background:linear-gradient(180deg,#cfae6c,#a9823f);box-shadow:0 1px 3px rgba(0,0,0,.35)}
+.pergaminho::before{top:-6px}.pergaminho::after{bottom:-6px}
+.pergaminho cite{display:block;font-family:var(--corpo);font-style:normal;font-size:12px;font-weight:800;margin-top:8px;color:#6b4a1d}
+.nova-vela{margin-top:16px;display:grid;gap:12px}
+.escolha-vela{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.escolha-vela button{border:2px solid var(--linha2);background:#fff;border-radius:16px;padding:12px 8px;font-weight:800;color:var(--tinta)}
+.escolha-vela button[aria-pressed="true"]{border-color:var(--ouro);background:#FFF6DC}
+.escolha-vela small{display:block;font-weight:600;color:var(--mudo)}
+.pergaminho-campo{font-family:var(--disp);font-style:italic;font-size:20px;background:linear-gradient(180deg,#f6e8c4,#ead3a0);border:1.5px solid #c9a868;color:#3b2a12;min-height:110px}
+
+/* bazar e vitrine */
+.vitrine-grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-top:14px}
+.peca{background:var(--papel);border-radius:18px;overflow:hidden;box-shadow:var(--sombra);display:flex;flex-direction:column}
+.peca img{width:100%;aspect-ratio:1;object-fit:cover;background:var(--azulbg);display:block}
+.peca .info{padding:10px 12px 12px;display:grid;gap:4px;flex:1}
+.peca b{font-size:16px;line-height:1.2}
+.peca .preco{font-family:var(--disp);font-size:24px;font-weight:700;color:var(--azul)}
+.peca .st{font-size:12.5px;font-weight:800;color:var(--espera)}
+.peca .btn{padding:10px;font-size:15px;margin-top:auto}
+.fotos-peca{display:flex;gap:6px;overflow-x:auto;scroll-snap-type:x mandatory}
+.fotos-peca img{flex:none;width:100%;scroll-snap-align:start}
+.miniaturas{display:flex;gap:8px;flex-wrap:wrap}
+.miniaturas img{width:72px;height:72px;object-fit:cover;border-radius:10px}
+.anuncio{background:var(--papel);border-radius:18px;box-shadow:var(--sombra);padding:14px 16px;display:grid;gap:4px}
+.anuncio .cat{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ouro)}
+.anuncio b{font-family:var(--disp);font-size:24px;color:var(--azul);line-height:1.1}
+.anuncio .acoes{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.anuncio .acoes a,.anuncio .acoes button{text-decoration:none;padding:9px 14px;font-size:15px}
+.vit-topo{background:linear-gradient(150deg,#2D5A3D,#3F7A52);color:#fff;border-radius:22px;padding:20px}
+.vit-topo h2{font-family:var(--disp);font-size:30px;margin:0;line-height:1.1}
+.vit-topo p{margin:8px 0 0;opacity:.92}
+.baz-topo{background:linear-gradient(150deg,#7A3420,#B0603A);color:#fff;border-radius:22px;padding:20px}
+.baz-topo h2{font-family:var(--disp);font-size:30px;margin:0;line-height:1.1}
+.baz-topo p{margin:8px 0 0;opacity:.92}
+
+/* confissão e exame */
+.exame-parte{margin-top:12px}
+.exame-parte h3{font-family:var(--disp);font-size:1.35em;color:var(--azul);margin:0 0 4px;line-height:1.15}
+.pergunta{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--linha);font-size:1em;line-height:1.4;cursor:pointer}
+.pergunta input{width:22px;height:22px;flex:none;margin-top:2px}
+.pergunta:last-child{border-bottom:0}
+
+/* caixinha de sugestões flutuante */
+.fab-sugestao{position:fixed;left:14px;bottom:calc(86px + env(safe-area-inset-bottom,0px));z-index:34;border:0;border-radius:999px;width:56px;height:56px;
+  background:var(--azul);color:#fff;font-size:26px;box-shadow:0 6px 18px rgba(0,0,0,.25);display:grid;place-items:center}
+.secao-equipe{margin-top:22px}
+.secao-equipe > h2{font-family:var(--disp);color:var(--azul);font-size:28px;margin:0 0 8px}
+.item-equipe{background:var(--papel);border-radius:14px;padding:12px 14px;box-shadow:var(--sombra);display:grid;gap:4px;font-size:15px;margin-bottom:10px}
+.item-equipe.novo{border-left:5px solid var(--ouro)}
+.item-equipe .acoes{display:flex;gap:8px;flex-wrap:wrap}
+.item-equipe .acoes .btn{padding:8px 14px;font-size:14px}
+
 .toast{position:fixed;left:50%;bottom:calc(92px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--tinta);color:#fff;padding:12px 18px;border-radius:14px;font-weight:700;z-index:50;max-width:calc(100% - 32px);box-shadow:var(--sombra)}
 @media (min-width:700px){.grade{grid-template-columns:1fr 1fr 1fr}.grande.largo{grid-column:span 3}}
+
+/* =====================================================================
+   TEMA VIDRO 3D (nov/2026): cartões semitransparentes flutuando sobre a
+   imagem de Nossa Senhora (azul e ouro). Paleta tirada da imagem.
+   ===================================================================== */
+:root{
+  --azul3:#8FB3E0; --gelo:#CFE0F5; --ouroV:#E3B23C; --ouroE:#B98A2E;
+  --vidro:rgba(255,255,255,.58); --vidro-forte:rgba(255,255,255,.80); --vidro-borda:rgba(255,255,255,.75);
+  --desfoque:blur(16px) saturate(150%);
+  --bisel:inset 0 1.5px 0 rgba(255,255,255,.9), inset 0 -1px 0 rgba(11,47,107,.06);
+  --flutua:0 14px 34px -10px rgba(11,47,107,.35), 0 3px 8px rgba(11,47,107,.10);
+  --flutua2:0 22px 44px -12px rgba(11,47,107,.45), 0 6px 14px rgba(11,47,107,.14);
+  --sombra:var(--bisel), var(--flutua);
+}
+html{background:linear-gradient(170deg,#E8EFF8 0%,#D9E5F4 45%,#C9D9EE 100%) fixed}
+body::before{background:url("img/fundo.jpg") center bottom/cover no-repeat;opacity:.95;mix-blend-mode:multiply}
+@media (min-width:700px){body::before{background-size:auto 100%;background-position:right 6% bottom}}
+
+/* vidro: claro (texto escuro) */
+.cartao,.item,.horarios,.ap,.aviso-card,.aniv,.notif,.temas button,.livros button,.caps button,.resultado,.peca,.anuncio,.cad,
+.item-equipe,.datas button,.grande,.nota-nova,.acesso,.tamanho button,.indice button,.abas button,.chips button,.dias button,
+.anos button,.meses button,.escolha-vela button,.aviso-novos{
+  background:var(--vidro);-webkit-backdrop-filter:var(--desfoque);backdrop-filter:var(--desfoque);
+  border:1px solid var(--vidro-borda);box-shadow:var(--sombra)}
+.cartao,.leitura,.oracao-txt,.horarios,.aniv{background:var(--vidro-forte)}
+.cartao{border-radius:24px}
+.item,.resultado,.cad,.item-equipe,.peca,.anuncio{border-radius:20px}
+.ap,.aviso-card{border-left-width:6px}
+.campo{background:rgba(255,255,255,.86);border-color:rgba(28,74,147,.22);box-shadow:inset 0 1px 3px rgba(11,47,107,.08)}
+.campo:focus{background:#fff}
+.abas button[aria-selected="true"],.chips button[aria-pressed="true"],.dias button[aria-current="true"],
+.anos button[aria-pressed="true"],.meses button[aria-pressed="true"]{background:linear-gradient(180deg,var(--azul2),var(--azul));border-color:var(--azul);color:#fff;box-shadow:inset 0 1.5px 0 rgba(255,255,255,.25),0 6px 14px -4px rgba(11,47,107,.5)}
+.escolha-vela button[aria-pressed="true"]{background:rgba(255,236,190,.8);border-color:var(--ouroV)}
+.btn{box-shadow:inset 0 1.5px 0 rgba(255,255,255,.28),0 8px 18px -8px rgba(11,47,107,.6);background:linear-gradient(180deg,var(--azul2),var(--azul))}
+.btn.ouro{background:linear-gradient(180deg,#D6A537,var(--ouroE))}
+.btn.claro{background:rgba(255,255,255,.75);color:var(--azul);box-shadow:var(--bisel),0 4px 10px -4px rgba(11,47,107,.3)}
+.btn.zap{background:#25D366}
+.arte-fundo{background:rgba(8,22,52,.55);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.arte-caixa{background:rgba(255,255,255,.86);-webkit-backdrop-filter:var(--desfoque);backdrop-filter:var(--desfoque);border:1px solid var(--vidro-borda);border-radius:26px;box-shadow:var(--bisel),0 30px 60px -20px rgba(0,0,0,.5)}
+
+/* vidro escuro (texto branco) nas faixas de topo das telas */
+.velas-topo,.diz-topo,.dev-topo,.cap-topo,.vit-topo,.baz-topo{box-shadow:inset 0 1.5px 0 rgba(255,255,255,.25),var(--flutua);border:1px solid rgba(255,255,255,.25);border-radius:26px}
+.diz-topo{background:linear-gradient(150deg,rgba(140,100,32,.88),rgba(185,138,46,.84) 60%,rgba(214,168,74,.80))}
+.cap-topo{background:linear-gradient(150deg,rgba(11,47,107,.86),rgba(28,74,147,.80))}
+.vit-topo{background:linear-gradient(150deg,rgba(45,90,61,.88),rgba(63,122,82,.82))}
+.baz-topo{background:linear-gradient(150deg,rgba(122,52,32,.88),rgba(176,96,58,.82))}
+.cap-topo,.diz-topo,.vit-topo,.baz-topo{-webkit-backdrop-filter:var(--desfoque);backdrop-filter:var(--desfoque)}
+.devs button{background:linear-gradient(135deg,color-mix(in srgb,var(--cor) 84%,transparent),color-mix(in srgb,color-mix(in srgb,var(--cor) 70%,#000) 84%,transparent));
+  -webkit-backdrop-filter:var(--desfoque);backdrop-filter:var(--desfoque);border:1px solid rgba(255,255,255,.3);border-radius:24px;box-shadow:inset 0 1.5px 0 rgba(255,255,255,.3),var(--flutua);transition:transform .18s,box-shadow .18s}
+.devs button:active{transform:translateY(2px) scale(.99)}
+
+/* topo e barra de baixo */
+.topo{background:rgba(11,47,107,.80);-webkit-backdrop-filter:var(--desfoque);backdrop-filter:var(--desfoque);box-shadow:inset 0 -1px 0 rgba(255,255,255,.12),0 8px 24px -12px rgba(11,47,107,.6)}
+.menu-btn{border:0;background:rgba(255,255,255,.14);color:#fff;width:46px;height:46px;border-radius:14px;display:grid;place-items:center;flex:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.25)}
+body{padding-bottom:calc(98px + env(safe-area-inset-bottom,0px))}
+.nav{inset:auto 12px calc(10px + env(safe-area-inset-bottom,0px)) 12px;padding:6px;border:1px solid var(--vidro-borda);border-radius:26px;
+  background:rgba(255,255,255,.72);-webkit-backdrop-filter:var(--desfoque);backdrop-filter:var(--desfoque);box-shadow:var(--bisel),var(--flutua2)}
+.nav .wrap{padding:0;gap:4px}
+.nav button{border-radius:18px;padding:7px 2px 8px;font-size:12.5px;color:#4D5B78;transition:background .2s,color .2s,transform .15s}
+.nav button svg{width:27px;height:27px}
+.nav button[aria-current="page"]{background:linear-gradient(180deg,var(--azul2),var(--azul));color:#fff;box-shadow:inset 0 1.5px 0 rgba(255,255,255,.3),0 8px 16px -6px rgba(11,47,107,.6)}
+.nav button:active{transform:scale(.95)}
+.baixar-app,.fab-sugestao{bottom:calc(98px + env(safe-area-inset-bottom,0px))}
+.toast{bottom:calc(104px + env(safe-area-inset-bottom,0px))}
+
+/* ===== tela de entrada (abre ao iniciar o app) ===== */
+.entrada{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;align-items:center;overflow-y:auto;
+  background:radial-gradient(120% 80% at 50% 35%,#16397A 0%,#0B2F6B 45%,#061A3F 100%);color:#fff;
+  padding:calc(18px + env(safe-area-inset-top,0px)) 20px calc(22px + env(safe-area-inset-bottom,0px));transition:opacity .5s ease,transform .5s ease}
+.entrada.saindo{opacity:0;transform:scale(1.04);pointer-events:none}
+.entrada .marca{display:flex;align-items:center;gap:12px;align-self:center}
+.entrada .marca img{width:54px;height:54px;border-radius:16px;box-shadow:0 6px 18px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.3)}
+.entrada .marca b{font-family:var(--disp);font-size:32px;font-weight:700;letter-spacing:.01em;line-height:1}
+.entrada .marca small{display:block;font-family:var(--corpo);font-size:11.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#E3C27A;margin-top:4px}
+.entrada canvas{width:min(420px,100%);flex:1 1 auto;min-height:300px;max-height:52vh;display:block;margin:6px 0 4px}
+.entrada .legenda-ent{font-family:var(--disp);font-style:italic;font-size:21px;color:#F3E6C4;min-height:28px;text-align:center;transition:opacity .6s}
+.entrada .botoes{width:min(420px,100%);display:grid;gap:12px;margin-top:10px}
+.entrada .btn-ent{border:0;border-radius:18px;padding:17px;font-size:19px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:10px;
+  box-shadow:0 10px 24px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.35)}
+.entrada .btn-ent.entrar{background:linear-gradient(180deg,#F0CB6A,#C9962F);color:#2B1E05}
+.entrada .btn-ent.baixar{background:rgba(255,255,255,.14);color:#fff;border:1.5px solid rgba(255,255,255,.35);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.entrada .login-ent{width:min(420px,100%);margin-top:18px;padding:14px;border-radius:18px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18)}
+.entrada .login-ent p{margin:0 0 8px;font-size:13.5px;color:#C9D6EE;font-weight:700;letter-spacing:.04em}
+.entrada .login-ent form{display:flex;gap:8px}
+.entrada .login-ent input{flex:1;min-width:0;border:1.5px solid rgba(255,255,255,.3);background:rgba(255,255,255,.95);color:var(--tinta);border-radius:14px;padding:12px 14px;font-size:17px;letter-spacing:.1em;text-align:center}
+.entrada .login-ent button{border:0;border-radius:14px;padding:0 18px;font-weight:800;background:#1C4A93;color:#fff}
+.entrada .login-ent .msg{margin:8px 0 0;font-size:14px;color:#FFB4A8;min-height:1em}
+
+/* tutorial animado de instalação no iPhone */
+.tut{max-width:380px;text-align:center;padding:18px}
+.tut h2{font-family:var(--disp);font-size:28px;color:var(--azul);margin:0 0 4px}
+.tut .passo-txt{font-size:18px;font-weight:700;min-height:52px;margin:10px 0 0;color:var(--tinta)}
+.iphone{position:relative;width:220px;height:400px;margin:12px auto 0;border-radius:34px;background:#111;padding:10px;box-shadow:0 14px 30px rgba(0,0,0,.3)}
+.iphone .tela-i{position:relative;width:100%;height:100%;border-radius:26px;overflow:hidden;background:#FAF6EE}
+.iphone .site{position:absolute;inset:0 0 52px;background:linear-gradient(180deg,#0B2F6B 0 54px,#FAF6EE 54px)}
+.iphone .site::after{content:"App Amparo";position:absolute;left:0;right:0;top:18px;text-align:center;color:#fff;font-family:var(--disp);font-weight:700;font-size:18px}
+.iphone .barra{position:absolute;left:0;right:0;bottom:0;height:52px;background:#F1F1F3;border-top:1px solid #DDD;display:flex;justify-content:space-around;align-items:center;font-size:20px;color:#2C7BF6}
+.iphone .barra .comp{position:relative;width:34px;height:34px;display:grid;place-items:center;border-radius:10px}
+.iphone .folha{position:absolute;left:6px;right:6px;bottom:-230px;height:220px;background:#fff;border-radius:16px 16px 0 0;box-shadow:0 -6px 20px rgba(0,0,0,.18);transition:bottom .5s ease;padding:12px 10px;text-align:left;font-size:13.5px;color:#222}
+.iphone .folha div{padding:9px 8px;border-bottom:1px solid #EEE;display:flex;justify-content:space-between}
+.iphone .folha .alvo{background:#E8F0FE;border-radius:10px;font-weight:800;color:#0B2F6B}
+.iphone .add{position:absolute;inset:0;background:#fff;display:none;flex-direction:column;align-items:center;justify-content:center;gap:10px;font-size:14px;color:#222}
+.iphone .add img{width:64px;height:64px;border-radius:16px}
+.iphone .add .ok{position:absolute;top:14px;right:14px;color:#2C7BF6;font-weight:800;font-size:15px;padding:4px 8px;border-radius:8px}
+.iphone .dedo{position:absolute;font-size:38px;transition:left .6s ease,top .6s ease,opacity .3s;filter:drop-shadow(0 3px 4px rgba(0,0,0,.35));z-index:5;pointer-events:none}
+.iphone .pulso{position:absolute;width:44px;height:44px;border-radius:50%;border:3px solid #E3B23C;animation:pulso 1.1s ease-out infinite;opacity:0;z-index:4}
+@keyframes pulso{0%{transform:scale(.5);opacity:1}100%{transform:scale(1.6);opacity:0}}
+.tut .bolinhas{display:flex;gap:6px;justify-content:center;margin-top:10px}
+.tut .bolinhas i{width:9px;height:9px;border-radius:50%;background:#D3CBB9}
+.tut .bolinhas i.on{background:var(--ouro)}
+
+/* ---------- menu lateral ---------- */
+.lateral{position:fixed;z-index:70;top:10px;bottom:10px;left:10px;width:min(300px,84vw);display:flex;flex-direction:column;gap:10px;
+  padding:18px 14px 14px;border-radius:30px;color:#fff;overflow-y:auto;overscroll-behavior:contain;
+  background:linear-gradient(180deg,rgba(16,38,84,.93),rgba(11,30,70,.95));-webkit-backdrop-filter:blur(18px) saturate(140%);backdrop-filter:blur(18px) saturate(140%);
+  border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.18),0 30px 60px -20px rgba(0,0,0,.6);
+  transform:translateX(calc(-100% - 20px));visibility:hidden;transition:transform .32s cubic-bezier(.2,.8,.2,1),visibility 0s linear .32s}
+.lateral.aberta{transform:none;visibility:visible;transition:transform .32s cubic-bezier(.2,.8,.2,1)}
+.lateral-fundo{position:fixed;inset:0;z-index:65;background:rgba(6,16,40,.5);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+body.menu-aberto{overflow:hidden}
+.lat-topo{display:flex;align-items:center;gap:12px;padding:2px 4px 12px;border-bottom:1px solid rgba(255,255,255,.12)}
+.lat-avatar{width:56px;height:56px;border-radius:50%;flex:none;display:grid;place-items:center;
+  background:radial-gradient(circle at 35% 30%,#2A5BAA,#0B2F6B);border:2px solid var(--ouro2);box-shadow:0 6px 14px -4px rgba(0,0,0,.5),inset 0 1.5px 0 rgba(255,255,255,.3)}
+.lat-avatar svg{width:34px;height:34px}
+.lat-ola{flex:1;min-width:0}
+.lat-ola small{display:block;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--ouro2);line-height:1.25}
+.lat-ola b{display:block;font-family:var(--disp);font-size:24px;line-height:1.1;margin-top:2px}
+.lat-fechar{border:0;background:rgba(255,255,255,.1);color:#fff;width:40px;height:40px;border-radius:12px;font-size:18px;flex:none}
+.lat-itens{display:flex;flex-direction:column;gap:4px}
+.lat-itens button{border:0;background:none;color:#E3EBF8;text-align:left;display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:16px;font-size:17px;font-weight:700;transition:background .2s}
+.lat-itens button i{font-style:normal;width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-size:19px;flex:none;
+  background:rgba(255,255,255,.09);box-shadow:inset 0 1px 0 rgba(255,255,255,.14)}
+.lat-itens button:hover{background:rgba(255,255,255,.07)}
+.lat-itens button[aria-current="page"]{background:linear-gradient(180deg,#F4F8FF,#DCE7F7);color:var(--azul);
+  box-shadow:inset 0 1.5px 0 #fff,inset 0 -2px 0 rgba(11,47,107,.12),0 10px 20px -8px rgba(0,0,0,.55)}
+.lat-itens button[aria-current="page"] i{background:linear-gradient(180deg,var(--azul2),var(--azul));box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 4px 8px -2px rgba(11,47,107,.5)}
+.lat-itens button.tem-aviso{position:relative}
+.lat-itens button.tem-aviso::after{content:"";position:absolute;left:42px;top:8px;width:11px;height:11px;border-radius:50%;background:#D93025;border:2px solid #10264F}
+.lat-card{margin-top:auto;border-radius:24px;padding:16px;text-align:center;display:grid;gap:4px;justify-items:center;color:#3A2A0B;
+  background:linear-gradient(160deg,#F7DE9A,#E3B23C 60%,#C9962F);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.6),0 14px 26px -10px rgba(0,0,0,.6)}
+.lat-card-ic{width:54px;height:54px;margin-top:-34px;border-radius:18px;display:grid;place-items:center;font-size:27px;background:linear-gradient(180deg,#fff,#F3E6C4);box-shadow:inset 0 1.5px 0 #fff,0 8px 16px -6px rgba(0,0,0,.45)}
+.lat-card b{font-size:17px;line-height:1.2;margin-top:4px}
+.lat-card small{font-size:13.5px;opacity:.85}
+.lat-card .btn{margin-top:8px;width:100%;background:linear-gradient(180deg,#1C4A93,#0B2F6B)}
+
+/* ---------- início: quadrados flutuantes 3D de vidro ---------- */
+.inspira{border-radius:30px;padding:28px 22px 24px;background:linear-gradient(155deg,rgba(11,47,107,.84) 0%,rgba(18,62,134,.76) 65%,rgba(28,74,147,.70) 100%);
+  -webkit-backdrop-filter:var(--desfoque);backdrop-filter:var(--desfoque);border:1px solid rgba(255,255,255,.22);
+  box-shadow:inset 0 1.5px 0 rgba(255,255,255,.3),0 24px 44px -16px rgba(11,47,107,.65)}
+.inspira::after{background:radial-gradient(circle,rgba(227,178,60,.45),transparent 70%)}
+.grade{gap:14px;margin-top:18px}
+.grande{border-radius:26px;padding:16px;min-height:158px;transition:transform .2s cubic-bezier(.2,.8,.2,1),box-shadow .2s;transform:translateY(0)}
+.grande:hover{transform:translateY(-4px) rotateX(2deg);box-shadow:var(--bisel),var(--flutua2)}
+.grande:active{transform:translateY(1px) scale(.98);box-shadow:var(--bisel),0 6px 14px -6px rgba(11,47,107,.4)}
+.grande .ic{width:52px;height:52px;border-radius:16px;font-size:26px;color:#fff;
+  background:linear-gradient(160deg,var(--azul2),var(--azul));box-shadow:inset 0 1.5px 0 rgba(255,255,255,.35),inset 0 -2px 0 rgba(0,0,0,.15),0 8px 14px -6px rgba(11,47,107,.65)}
+.grande b{font-size:19.5px;color:var(--tinta)}
+.grande span{color:#3F4A60}
+/* um tom da paleta para cada quadrado */
+.grade .grande:not(.largo):nth-of-type(4n+1){background:rgba(207,224,245,.62)}
+.grade .grande:not(.largo):nth-of-type(4n+2){background:rgba(255,239,200,.60)}
+.grade .grande:not(.largo):nth-of-type(4n+2) .ic{background:linear-gradient(160deg,#E3B23C,#B98A2E)}
+.grade .grande:not(.largo):nth-of-type(4n+3){background:rgba(255,255,255,.60)}
+.grade .grande:not(.largo):nth-of-type(4n+3) .ic{background:linear-gradient(160deg,#8FB3E0,#1C4A93)}
+.grade .grande:not(.largo):nth-of-type(4n+4){background:rgba(143,179,224,.45)}
+.grande.evang{background:rgba(255,246,222,.66);border-color:rgba(255,255,255,.8)}
+.grande.evang .ic{background:linear-gradient(160deg,#E3B23C,#B98A2E)}
+.grande.santo{background:rgba(255,255,255,.64)}
+.grande.santo .foto{border-color:var(--ouroV);box-shadow:0 8px 16px -6px rgba(11,47,107,.5)}
+.grande.vitrine{background:rgba(223,240,229,.66)}
+.grande.vitrine .ic{background:linear-gradient(160deg,#3F7A52,#2D5A3D)}
+.grande.pastoral,.grande.diz-pix{background:linear-gradient(150deg,rgba(11,47,107,.86),rgba(28,74,147,.76));border-color:rgba(255,255,255,.22)}
+.grande.pastoral b,.grande.diz-pix b{color:#fff}
+.grande.pastoral .ic,.grande.diz-pix .ic{background:rgba(255,255,255,.16);color:var(--ouro2);box-shadow:inset 0 1px 0 rgba(255,255,255,.3)}
+.grande.dizimo-inicio{background:linear-gradient(135deg,rgba(140,100,32,.90),rgba(185,138,46,.86) 60%,rgba(227,178,60,.82));border-color:rgba(255,255,255,.35);min-height:0}
+.grande.dizimo-inicio b{color:#fff;font-size:21px}
+.grande.dizimo-inicio .ic{background:rgba(255,255,255,.22);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.4),0 6px 12px -4px rgba(0,0,0,.3)}
+.notif{border-color:rgba(227,178,60,.7)}
+.avisos-pascom > .rot,.rot-sec{color:#8A6418}
+.titulo-sec{text-shadow:0 1px 0 rgba(255,255,255,.7)}
+.acesso{border-radius:22px;padding:16px 18px;border-top:1px solid var(--vidro-borda)}
+@media (prefers-reduced-motion:reduce){.grande,.lateral,.nav button{transition:none}.grande:hover{transform:none}}
+
+/* ---------- computador: menu fixo à esquerda ---------- */
+@media (min-width:900px){
+  body{padding-left:316px;padding-bottom:30px}
+  .lateral{transform:none;visibility:visible;top:16px;bottom:16px;left:16px;width:284px;transition:none}
+  .lateral-fundo,.lat-fechar,.menu-btn,.nav{display:none!important}
+  body.menu-aberto{overflow:auto}
+  .topo{margin:16px 16px 0 0;border-radius:24px;top:16px}
+  .wrap{max-width:1060px}
+  .baixar-app,.fab-sugestao{bottom:24px}
+  .fab-sugestao{left:auto;right:24px}
+  .baixar-app{right:96px}
+  .toast{bottom:30px;left:calc(50% + 158px)}
+}
+@media (min-width:1180px){
+  .grade{grid-template-columns:repeat(4,1fr)}
+  .grande.largo{grid-column:span 2}
+}
 </style>
 
 <header class="topo">
@@ -354,21 +666,66 @@ body:has(.baixar-app:not([hidden])) .tela{padding-bottom:90px}
     <button class="voltar" id="voltar" aria-label="Voltar" hidden>‹</button>
     <svg class="selo" id="selo" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="19" fill="#fff" fill-opacity=".1" stroke="#E3C27A" stroke-width="1.5"/><path d="M20 8v24M13 15h14" stroke="#E3C27A" stroke-width="2.6" stroke-linecap="round"/><path d="M12 27c3 3 13 3 16 0" stroke="#fff" stroke-opacity=".7" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>
     <h1 id="tituloTopo"><small>Paróquia</small>Nossa Senhora do Amparo</h1>
+    <button class="menu-btn" id="menuBtn" aria-label="Abrir menu" aria-controls="lateral" aria-expanded="false"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
   </div>
 </header>
 
+<!-- menu lateral: gaveta no celular, fixo à esquerda no computador -->
+<div class="lateral-fundo" id="lateralFundo" hidden></div>
+<aside class="lateral" id="lateral" aria-label="Menu">
+  <div class="lat-topo">
+    <div class="lat-avatar" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M20 8v24M13 15h14" stroke="#E3C27A" stroke-width="2.8" stroke-linecap="round"/><path d="M12 27c3 3 13 3 16 0" stroke="#fff" stroke-opacity=".75" stroke-width="1.7" fill="none" stroke-linecap="round"/></svg></div>
+    <div class="lat-ola"><small>Paróquia N. Sra. do Amparo</small><b id="latOla">Seja bem-vindo!</b></div>
+    <button class="lat-fechar" id="latFechar" aria-label="Fechar menu">✕</button>
+  </div>
+  <nav class="lat-itens">
+    <button data-ir="inicio"><i>🏠</i>Início</button>
+    <button data-ir="dizimo"><i>💛</i>Pagar meu Dízimo</button>
+    <button data-ir="inicio" data-rolar="avisosPascom"><i>📣</i>Avisos e horários</button>
+    <button data-ir="velas"><i>🕯️</i>Velas</button>
+    <button data-ir="tercos"><i>📿</i>Terços</button>
+    <button data-ir="confissao"><i>🕊️</i>Confissão</button>
+    <button data-ir="oracoes"><i>🙏</i>Orações</button>
+    <button data-ir="novenas"><i>✨</i>Novenas</button>
+    <button data-ir="devocionarios"><i>📘</i>Devocionários</button>
+    <button data-ir="biblia"><i>📖</i>Bíblia</button>
+    <button data-ir="evangelho"><i>📜</i>Evangelho do dia</button>
+    <button data-ir="santo"><i>⭐</i>Santo do dia</button>
+    <button data-ir="bazar"><i>🛍️</i>Bazar</button>
+    <button data-ir="vitrine"><i>🏪</i>Vitrine do Amparo</button>
+    <button data-ir="pastoral" id="navPastoral" hidden><i>🤝</i>Equipe</button>
+  </nav>
+  <div class="lat-card" id="latCard" hidden>
+    <span class="lat-card-ic" id="latCardIc">🔔</span>
+    <b id="latCardTit">Ativar avisos no celular</b>
+    <small id="latCardTxt">Missas, confissões e recados da paróquia</small>
+    <button class="btn" id="latCardBtn">Ativar</button>
+  </div>
+</aside>
+
 <main class="wrap" id="app"></main>
+<div class="entrada" id="entrada" hidden>
+  <div class="marca"><img src="icons/icon-192.png" alt="" id="entLogo"><div><b>App Amparo</b><small>Paróquia N. Sra. do Amparo</small></div></div>
+  <canvas id="pontos3d" aria-hidden="true"></canvas>
+  <div class="legenda-ent" id="legEnt"></div>
+  <div class="botoes">
+    <button class="btn-ent entrar" id="entEntrar">Entrar</button>
+    <button class="btn-ent baixar" id="entBaixar" hidden>📲 Baixar o app</button>
+  </div>
+  <div class="login-ent"><p>🔒 ACESSO DA EQUIPE · Padre, Dízimo e Pascom</p>
+    <form id="entForm"><input id="entPin" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="40" placeholder="PIN" aria-label="PIN da equipe"><button>Entrar</button></form>
+    <p class="msg" id="entMsg"></p></div>
+</div>
 <button class="baixar-app" id="btnInstalar" hidden>📲 Baixar app</button>
+<button class="fab-sugestao" id="btnSugestao" aria-label="Caixinha de sugestões" title="Caixinha de sugestões">💬</button>
 
 <nav class="nav" aria-label="Seções">
   <div class="wrap">
     <button data-ir="inicio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-5h4v5"/></svg>Início</button>
     <button data-ir="dizimo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6-3.8-6-8.5A3.5 3.5 0 0 1 12 10a3.5 3.5 0 0 1 6 2.5C18 17.2 12 21 12 21z"/><path d="M12 2v5M9.5 4.5h5"/></svg>Dízimo</button>
-    <button data-ir="biblia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/><path d="M12 7v5M9.5 9h5"/></svg>Bíblia</button>
-    <button data-ir="oracoes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M10 5h4"/><path d="M8 21v-6.5a4 4 0 0 1 1.2-2.8L12 9l2.8 2.7a4 4 0 0 1 1.2 2.8V21"/><path d="M6 21h12"/></svg>Orações</button>
-    <button data-ir="novenas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1.6"/><circle cx="17.5" cy="7.5" r="1.6"/><circle cx="19" cy="13" r="1.6"/><circle cx="6.5" cy="7.5" r="1.6"/><circle cx="5" cy="13" r="1.6"/><path d="M12 15v6M9.5 17.5h5"/></svg>Novenas</button>
-    <button data-ir="devocionarios"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h12v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5"/><path d="M12 7v6M9.5 9.5h5"/><path d="M8 19h10"/></svg>Devoções</button>
-    <button data-ir="pastoral" id="navPastoral" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10z"/></svg>Pastoral</button>
+    <button data-ir="velas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c1.8 2 2.5 3.4 2.5 4.6a2.5 2.5 0 0 1-5 0C9.5 5.4 10.2 4 12 2z"/><rect x="8.5" y="10" width="7" height="11" rx="1.2"/><path d="M6 21h12"/></svg>Velas</button>
+    <button data-ir="tercos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1.6"/><circle cx="17.5" cy="7.5" r="1.6"/><circle cx="19" cy="13" r="1.6"/><circle cx="6.5" cy="7.5" r="1.6"/><circle cx="5" cy="13" r="1.6"/><path d="M12 15v6M9.5 17.5h5"/></svg>Terços</button>
+    <button id="navMenu" aria-label="Abrir menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>Menu</button>
   </div>
 </nav>
 
@@ -405,7 +762,12 @@ async function servidor(acao, dados={}){
 
 // ---------- sessão (PIN) ----------
 let sessao = ler('sessao', {pin:'', papel:''});
-function atualizarNav(){ $('#navPastoral').hidden = !sessao.papel; }
+const NOME_PAPEL = {padre: 'Padre', dizimo: 'Pastoral do Dízimo', pascom: 'Pascom'};
+const ehDizimo = () => ['dizimo','padre'].includes(sessao.papel);
+function atualizarNav(){
+  $('#navPastoral').hidden = !sessao.papel;
+  $('#latOla').textContent = sessao.papel ? 'Olá, ' + (NOME_PAPEL[sessao.papel] || sessao.papel) + '!' : 'Seja bem-vindo!';
+}
 
 // ---------- dados locais ----------
 const cache = {};
@@ -415,14 +777,16 @@ async function carregar(nome){
 }
 
 // ---------- rotas ----------
-const rotas = {inicio:telaInicio, dizimo:telaDizimo, devocionarios:telaDevocionarios, oracoes:telaOracoes, oracao:telaOracao, evangelho:telaEvangelho, santo:telaSanto, novenas:telaNovenas, novena:telaNovena, biblia:telaBiblia, pastoral:telaPastoral};
+const rotas = {inicio:telaInicio, dizimo:telaDizimo, devocionarios:telaDevocionarios, oracoes:telaOracoes, oracao:telaOracao, evangelho:telaEvangelho, santo:telaSanto, novenas:telaNovenas, novena:telaNovena, biblia:telaBiblia, pastoral:telaPastoral,
+  velas:telaVelas, tercos:telaTercos, confissao:telaConfissao, bazar:telaBazar, vitrine:telaVitrine};
 function ir(h){ location.hash = h; }
 function rota(){
   const [nome, ...args] = (location.hash.slice(1) || 'inicio').split('/').map(decodeURIComponent);
   const fn = rotas[nome] || telaInicio;
-  const raiz = ['inicio','dizimo','biblia','novenas','oracoes','devocionarios','pastoral'].includes(nome) && !args.length;
+  const raiz = ['inicio','dizimo','biblia','velas','tercos','oracoes','pastoral'].includes(nome) && !args.length;
   $('#voltar').hidden = raiz; $('#selo').hidden = !raiz;
-  document.querySelectorAll('.nav button').forEach(b => b.setAttribute('aria-current', b.dataset.ir === nome ? 'page' : 'false'));
+  document.querySelectorAll('.nav button[data-ir], .lat-itens button:not([data-rolar])').forEach(b => b.setAttribute('aria-current', b.dataset.ir === nome ? 'page' : 'false'));
+  fecharMenu();
   if (nome === 'pastoral' && !sessao.papel) { ir('inicio'); return; }
   window.scrollTo(0,0);
   fn(...args);
@@ -430,7 +794,41 @@ function rota(){
 function topo(sub, titulo){ $('#tituloTopo').innerHTML = `<small>${esc(sub)}</small>${esc(titulo)}`; }
 window.addEventListener('hashchange', rota);
 $('#voltar').onclick = () => history.length > 1 ? history.back() : ir('inicio');
-document.querySelectorAll('.nav button').forEach(b => b.onclick = () => ir(b.dataset.ir));
+document.querySelectorAll('.nav button[data-ir]').forEach(b => b.onclick = () => ir(b.dataset.ir));
+
+// ---------- menu lateral (gaveta no celular, fixo no computador) ----------
+function abrirMenu(){
+  atualizarCartaoMenu();
+  $('#lateral').classList.add('aberta'); $('#lateralFundo').hidden = false;
+  $('#menuBtn').setAttribute('aria-expanded', 'true'); document.body.classList.add('menu-aberto');
+  const atual = $('.lat-itens button[aria-current="page"]') || $('.lat-itens button'); if (atual) atual.focus({preventScroll:true});
+}
+function fecharMenu(){
+  $('#lateral').classList.remove('aberta'); $('#lateralFundo').hidden = true;
+  $('#menuBtn').setAttribute('aria-expanded', 'false'); document.body.classList.remove('menu-aberto');
+}
+function atualizarCartaoMenu(){
+  const card = $('#latCard');
+  if (precisaAtivar()) {
+    $('#latCardIc').textContent = '🔔'; $('#latCardTit').textContent = 'Ativar avisos no celular'; $('#latCardTxt').textContent = 'Missas, confissões e recados da paróquia'; $('#latCardBtn').textContent = 'Ativar';
+    $('#latCardBtn').onclick = async () => { $('#latCardBtn').disabled = true; if (await ativarNotificacoes()) { atualizarCartaoMenu(); cartaoNotificacoes(); } $('#latCardBtn').disabled = false; };
+    card.hidden = false;
+  } else if (!jaInstalado()) {
+    $('#latCardIc').textContent = '📲'; $('#latCardTit').textContent = 'Baixar o app'; $('#latCardTxt').textContent = 'Tenha a paróquia na tela do celular'; $('#latCardBtn').textContent = 'Baixar';
+    $('#latCardBtn').onclick = () => $('#btnInstalar').click();
+    card.hidden = false;
+  } else card.hidden = true;
+}
+$('#menuBtn').onclick = abrirMenu;
+$('#navMenu').onclick = abrirMenu;
+$('#latFechar').onclick = fecharMenu;
+$('#lateralFundo').onclick = fecharMenu;
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && $('#lateral').classList.contains('aberta')) fecharMenu(); });
+document.querySelectorAll('.lat-itens button').forEach(b => b.onclick = () => {
+  const alvo = b.dataset.rolar;
+  if (alvo && (location.hash.slice(1) || 'inicio') === 'inicio') fecharMenu(); else ir(b.dataset.ir);
+  if (alvo) setTimeout(() => { const el = $('#'+alvo); const h = $('#horarios'); const destino = (el && el.innerHTML.trim()) ? el : (h && h.innerHTML.trim() ? h : el); if (destino) destino.scrollIntoView({behavior:'smooth', block:'start'}); }, 350);
+});
 
 // ---------- datas ----------
 const hoje = () => { const d = new Date(); d.setHours(12,0,0,0); return d; };
@@ -449,7 +847,19 @@ function seletorData(d, mudar){
 async function telaInicio(){
   topo('Paróquia','Nossa Senhora do Amparo');
   const insp = ler('inspiracao', '');
+  const podePascom = ['pascom','padre'].includes(sessao.papel);
   app.innerHTML = `<section class="tela">
+    <div id="avisosPascom"></div>
+    ${avisosDaSemana()}
+    ${podePascom ? `<div class="cartao editor" style="margin:0 0 16px" id="edAviso">
+      <b style="font-family:var(--disp);font-size:24px;color:var(--azul)">📣 Publicar aviso da paróquia</b>
+      <div class="linha"><select class="campo" id="avCat" style="max-width:200px"><option value="aviso">🔔 Aviso</option><option value="missa">⛪ Missa</option><option value="confissao">🕊️ Confissão</option><option value="evento">🎉 Evento</option><option value="pastoral">🤝 Pastoral</option></select>
+        <label class="pequeno mudo" style="display:flex;gap:6px;align-items:center">Mostrar até <input class="campo" id="avAte" type="date" style="width:auto;padding:8px"></label></div>
+      <input class="campo" id="avTit" maxlength="90" placeholder="Título (ex.: Missa de Natal às 20h)">
+      <textarea class="campo" id="avTxt" maxlength="900" placeholder="Texto do aviso"></textarea>
+      <label class="aceite"><input type="checkbox" id="avNotif" checked> Avisar também no celular de quem ativou as notificações</label>
+      <div class="linha"><button class="btn ouro" id="avPub">Publicar aviso</button><span class="mudo pequeno" id="avMsg"></span></div>
+    </div>` : ''}
     <div class="inspira">
       <div class="rot"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.6 6.4L21 9l-5 4.4L17.5 20 12 16.6 6.5 20 8 13.4 3 9l6.4-.6z"/></svg>Inspiração do Padre</div>
       <blockquote id="inspTexto">${esc(insp || 'Vinde a mim, todos vós que estais cansados e sobrecarregados, e eu vos aliviarei.')}</blockquote>
@@ -460,24 +870,29 @@ async function telaInicio(){
       <textarea id="inspNova" class="campo" maxlength="600" placeholder="Escreva a frase de hoje, Padre…">${esc(insp)}</textarea>
       <div class="linha"><button class="btn ouro" id="inspSalvar">Publicar inspiração</button><span class="mudo pequeno" id="inspMsg"></span></div>
     </div>` : ''}
-    ${avisosDaSemana()}
     <button class="grande largo dizimo-inicio" data-ir="dizimo"><div class="ic">${ICONE_PIX}</div><div><b>Pagar meu Dízimo</b><span>Pix do dízimo e da obra · cadastro de novo dizimista</span></div></button>
     <div class="grade">
       <button class="grande largo evang" data-ir="evangelho"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5h7a3 3 0 0 1 3 3v12a2 2 0 0 0-2-2H2z"/><path d="M22 5h-7a3 3 0 0 0-3 3v12a2 2 0 0 1 2-2h8z"/></svg></div>
         <div><b>Evangelho do dia</b><span id="evPrev">${esc(dataLonga(hoje()))}</span></div></button>
       <button class="grande largo santo" data-ir="santo"><img class="foto" id="santoFoto" alt="" src="${SANTO_PADRAO}">
         <div><b>Santo do dia</b><span id="santoNome">Carregando…</span><span class="pequeno" style="color:var(--azul2);font-weight:700">Conhecer a história ›</span></div></button>
+      <button class="grande" data-ir="velas"><div class="ic">🕯️</div><div><b>Acender uma vela</b><span>Deixe sua intenção de oração</span></div></button>
+      <button class="grande" data-ir="tercos"><div class="ic">📿</div><div><b>Terços</b><span>Santo Terço, Misericórdia e outros</span></div></button>
+      <button class="grande" data-ir="confissao"><div class="ic">🕊️</div><div><b>Confissão</b><span>Horários e exame de consciência</span></div></button>
+      <button class="grande" data-ir="bazar"><div class="ic">🛍️</div><div><b>Bazar da paróquia</b><span>Veja as peças e reserve</span></div></button>
+      <button class="grande largo vitrine" data-ir="vitrine"><div class="ic">🏪</div><div><b>Vitrine do Amparo</b><span>Comércios e serviços da nossa comunidade. Precisou? Compre de quem reza com você!</span></div></button>
       <button class="grande" data-ir="oracoes"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M10 5h4"/><path d="M8 21v-6.5a4 4 0 0 1 1.2-2.8L12 9l2.8 2.7a4 4 0 0 1 1.2 2.8V21"/><path d="M6 21h12"/></svg></div><div><b>Orações</b><span>Por tema e por santo</span></div></button>
       <button class="grande" data-ir="novenas"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.5" r="1.5"/><circle cx="17.5" cy="7" r="1.5"/><circle cx="19" cy="12.5" r="1.5"/><circle cx="6.5" cy="7" r="1.5"/><circle cx="5" cy="12.5" r="1.5"/><path d="M12 15v6M9.5 17.5h5"/></svg></div><div><b>Novenas</b><span>Santos e devoções</span></div></button>
       <button class="grande" data-ir="devocionarios"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h12v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5"/><path d="M12 7v6M9.5 9.5h5"/><path d="M8 19h10"/></svg></div><div><b>Devocionários</b><span>Nossa Senhora, São José, Padre Pio…</span></div></button>
       <button class="grande" data-ir="biblia"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/><path d="M12 7v5M9.5 9h5"/></svg></div><div><b>Bíblia</b><span>Ave-Maria</span></div></button>
-      ${sessao.papel ? `<button class="grande largo pastoral" data-ir="pastoral"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10z"/></svg></div><div><b>Pastoral do Dízimo</b><span>Mural e cartaz dos aniversariantes</span></div></button>` : ''}
+      ${sessao.papel ? `<button class="grande largo pastoral" data-ir="pastoral"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10z"/></svg></div><div><b>${sessao.papel === 'pascom' ? 'Área da Pascom' : 'Pastoral do Dízimo'}</b><span>${sessao.papel === 'pascom' ? 'Horários, vitrine e sugestões' : 'Mural, cartaz, bazar, vitrine e sugestões'}</span></div></button>` : ''}
     </div>
     <div id="cartaoAvisos"></div>
+    <div id="horarios"></div>
     <section class="aniv" id="aniv" hidden></section>
     <div class="acesso">
-      ${sessao.papel ? `<p class="mudo pequeno">Conectado como <b>${sessao.papel === 'padre' ? 'Padre' : 'Pastoral do Dízimo'}</b>. <button class="btn claro" id="sair" style="padding:8px 14px;margin-left:6px">Sair</button></p>`
-      : `<p class="mudo pequeno" style="margin:0 0 8px"><b>Acesso restrito</b> — Padre e Pastoral do Dízimo</p>
+      ${sessao.papel ? `<p class="mudo pequeno">Conectado como <b>${NOME_PAPEL[sessao.papel] || sessao.papel}</b>. <button class="btn claro" id="sair" style="padding:8px 14px;margin-left:6px">Sair</button></p>`
+      : `<p class="mudo pequeno" style="margin:0 0 8px"><b>Acesso restrito</b> — Padre, Pastoral do Dízimo e Pascom</p>
          <form id="formPin"><span class="pin-caixa"><input class="campo" id="pin" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="40" placeholder="PIN" aria-label="PIN"><button type="button" class="olho" id="olho" aria-label="Mostrar PIN" aria-pressed="false"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/><path class="risco" d="M4 4l16 16"/></svg></button></span><button class="btn">Entrar</button></form>
          <p class="pequeno" id="pinMsg" style="color:var(--erro);margin:8px 0 0"></p>`}
     </div>
@@ -485,6 +900,20 @@ async function telaInicio(){
   app.querySelectorAll('[data-ir]').forEach(b => b.onclick = () => ir(b.dataset.ir));
   popupAvisos();
   cartaoNotificacoes();
+  conviteNotificacoes();
+  desenhaAvisosPascom(ler('avisosPascom', []));
+  desenhaHorarios(ler('horarios', []));
+  const avPub = $('#avPub');
+  if (avPub) avPub.onclick = async () => {
+    const titulo = $('#avTit').value.trim(); if (!titulo) return toast('Escreva o título do aviso');
+    avPub.disabled = true; $('#avMsg').textContent = 'Publicando…';
+    try {
+      const j = await servidor('aviso', {titulo, texto: $('#avTxt').value.trim(), categoria: $('#avCat').value, ate: $('#avAte').value, notificar: $('#avNotif').checked, autor: NOME_PAPEL[sessao.papel]});
+      guardar('avisosPascom', j.avisos); desenhaAvisosPascom(j.avisos); $('#avTit').value = ''; $('#avTxt').value = ''; $('#avMsg').textContent = 'Publicado!';
+      toast($('#avNotif').checked ? 'Aviso publicado. Ele chega no celular dos fiéis em até 1 hora.' : 'Aviso publicado');
+    } catch(e){ $('#avMsg').textContent = e.message; }
+    avPub.disabled = false;
+  };
 
   const olho = $('#olho');
   if (olho) olho.onclick = () => { const ver = $('#pin').type === 'password'; $('#pin').type = ver ? 'text' : 'password';
@@ -493,7 +922,7 @@ async function telaInicio(){
   if (f) f.onsubmit = async ev => {
     ev.preventDefault(); const pin = $('#pin').value.trim(); if (!pin) return;
     $('#pinMsg').textContent = 'Conferindo…';
-    try { sessao = {pin}; const j = await servidor('entrar'); sessao = {pin, papel:j.papel}; guardar('sessao', sessao); atualizarNav(); toast(j.papel === 'padre' ? 'Bem-vindo, Padre!' : 'Bem-vindo à Pastoral do Dízimo!'); telaInicio(); }
+    try { sessao = {pin}; const j = await servidor('entrar'); sessao = {pin, papel:j.papel}; guardar('sessao', sessao); atualizarNav(); toast(j.papel === 'padre' ? 'Bem-vindo, Padre!' : 'Bem-vindo(a), ' + NOME_PAPEL[j.papel] + '!'); telaInicio(); }
     catch(e){ sessao = {pin:'',papel:''}; $('#pinMsg').textContent = e.message; }
   };
   const s = $('#sair'); if (s) s.onclick = () => { sessao = {pin:'',papel:''}; guardar('sessao', sessao); atualizarNav(); telaInicio(); };
@@ -511,6 +940,8 @@ async function telaInicio(){
   servidorGet('inicio').then(j => {
     if (!j.ok) return; guardar('inspiracao', j.inspiracao || '');
     if (j.aniversariantes) { guardar('aniversariantes', j.aniversariantes); desenhaAniv(j.aniversariantes); }
+    if (j.avisos) { guardar('avisosPascom', j.avisos); desenhaAvisosPascom(j.avisos); }
+    if (j.horarios) { guardar('horarios', j.horarios); desenhaHorarios(j.horarios); }
     if (location.hash && location.hash !== '#inicio') return;
     const bq = $('#inspTexto'); if (bq && j.inspiracao) { bq.textContent = j.inspiracao; $('#inspAssin').hidden = false; }
   }).catch(()=>{});
@@ -518,6 +949,54 @@ async function telaInicio(){
   carregar('santos').then(s => { const x = s[chaveData(hoje())]; if (!x) return; const n=$('#santoNome'); if(n) n.textContent = x.nome; const im=$('#santoFoto'); if(im && x.img) { im.onerror=()=>{im.src=SANTO_PADRAO}; im.src = x.img; } }).catch(()=>{ const n=$('#santoNome'); if(n) n.textContent=''; });
   // evangelho de hoje (prévia)
   liturgia(hoje()).then(l => { const ev = lista(l.leituras?.evangelho)[0]; const p=$('#evPrev'); if (ev && p) p.textContent = `${ev.referencia} · ${l.liturgia}`; }).catch(()=>{});
+}
+
+// avisos publicados pela Pascom: aparecem primeiro no início
+const ICONE_AVISO = {aviso:'🔔', missa:'⛪', confissao:'🕊️', evento:'🎉', pastoral:'🤝'};
+function desenhaAvisosPascom(lista){
+  const el = $('#avisosPascom'); if (!el) return;
+  lista = lista || [];
+  if (!lista.length) { el.innerHTML = ''; return; }
+  const pode = ['pascom','padre'].includes(sessao.papel);
+  el.innerHTML = `<div class="avisos-pascom"><div class="rot">🔔 Avisos da paróquia</div>${lista.map(a => `<div class="ap ${esc(a.categoria)}"><div class="aviso-ic">${ICONE_AVISO[a.categoria] || '🔔'}</div><div style="flex:1;min-width:0">
+      <b>${esc(a.titulo)}</b>${a.texto ? `<p>${esc(a.texto)}</p>` : ''}<small>${a.data ? 'Publicado em ' + new Date(a.data).toLocaleDateString('pt-BR') : ''}${a.ate ? ' · até ' + a.ate.split('-').reverse().slice(0,2).join('/') : ''}</small>
+      ${pode ? `<div class="acoes"><button data-apagar="${esc(a.id)}">Tirar do app</button></div>` : ''}</div></div>`).join('')}</div>`;
+  el.querySelectorAll('[data-apagar]').forEach(b => b.onclick = async () => {
+    if (!confirm('Tirar este aviso do app?')) return;
+    try { const j = await servidor('apagarAviso', {id: b.dataset.apagar}); guardar('avisosPascom', j.avisos); desenhaAvisosPascom(j.avisos); } catch(e){ toast(e.message); }
+  });
+}
+
+// horários fixos da paróquia (a Pascom edita)
+const TIPOS_HORARIO = ['Missa','Confissão','Adoração','Terço','Secretaria'];
+function desenhaHorarios(lista, editar){
+  const el = $('#horarios'); if (!el) return;
+  lista = lista || [];
+  const pode = ['pascom','padre'].includes(sessao.papel);
+  if (!lista.length && !pode) { el.innerHTML = ''; return; }
+  if (editar) {
+    const linha = h => `<div class="hed"><select class="campo">${TIPOS_HORARIO.map(t => `<option ${t === h.tipo ? 'selected' : ''}>${t}</option>`).join('')}</select>
+      <input class="campo" placeholder="Dia (ex.: Domingo)" value="${esc(h.dia||'')}"><input class="campo" placeholder="Hora" value="${esc(h.hora||'')}"><input class="campo" placeholder="Obs. (opcional)" value="${esc(h.obs||'')}"><button type="button" aria-label="Remover">✕</button></div>`;
+    el.innerHTML = `<div class="horarios"><h2>Editar horários</h2><div id="hLinhas">${(lista.length ? lista : [{tipo:'Missa'}]).map(linha).join('')}</div>
+      <div class="linha" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="btn claro" id="hMais">+ Linha</button><button class="btn ouro" id="hSalvar">Salvar horários</button><button class="btn claro" id="hCancelar">Cancelar</button></div></div>`;
+    const ligaX = () => el.querySelectorAll('.hed button').forEach(b => b.onclick = () => b.parentElement.remove());
+    ligaX();
+    $('#hMais').onclick = () => { $('#hLinhas').insertAdjacentHTML('beforeend', linha({tipo:'Missa'})); ligaX(); };
+    $('#hCancelar').onclick = () => desenhaHorarios(lista);
+    $('#hSalvar').onclick = async () => {
+      const nova = [...el.querySelectorAll('.hed')].map(d => { const [t, a, b, c] = d.querySelectorAll('select,input'); return {tipo: t.value, dia: a.value.trim(), hora: b.value.trim(), obs: c.value.trim()}; }).filter(h => h.dia || h.hora);
+      try { const j = await servidor('horarios', {lista: nova}); guardar('horarios', j.horarios); desenhaHorarios(j.horarios); toast('Horários salvos'); } catch(e){ toast(e.message); }
+    };
+    return;
+  }
+  el.innerHTML = `<div class="horarios"><h2>⛪ Horários da paróquia</h2>${horariosHtml(lista) || '<p class="mudo">Nenhum horário cadastrado ainda.</p>'}
+    ${pode ? '<button class="btn claro" id="hEditar" style="margin-top:10px">Editar horários</button>' : ''}</div>`;
+  const e = $('#hEditar'); if (e) e.onclick = () => desenhaHorarios(lista, true);
+}
+function horariosHtml(lista, so){
+  const tipos = so ? [so] : TIPOS_HORARIO.concat([...new Set(lista.map(h => h.tipo))].filter(t => !TIPOS_HORARIO.includes(t)));
+  return tipos.map(t => { const l = lista.filter(h => h.tipo === t); if (!l.length) return '';
+    return `<div class="hgrupo">${so ? '' : `<h3>${esc(t)}</h3>`}${l.map(h => `<div class="hlinha"><span>${esc(h.dia)}${h.obs ? ` <span class="mudo pequeno">· ${esc(h.obs)}</span>` : ''}</span><b>${esc(h.hora)}</b></div>`).join('')}</div>`; }).join('');
 }
 
 function desenhaAniv(a){
@@ -650,22 +1129,36 @@ function popupAvisos(){
 const VAPID = 'BIwIJKfaDCn2iCa9KvltB0iarqg0nHsFyrjq7aBUoiiKFkgZpqvLof3P1g3mvYsrAGdcri8n7-rrqca3ykiyjlY';
 const podeNotificar = () => 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
 function chaveVapid(b64){ const p = '='.repeat((4 - b64.length % 4) % 4); const r = atob((b64 + p).replace(/-/g, '+').replace(/_/g, '/')); return Uint8Array.from(r, c => c.charCodeAt(0)); }
+const precisaAtivar = () => !ler('avisosAtivos', false) && (podeNotificar() || (ehIphone() && !jaInstalado())) && !(podeNotificar() && Notification.permission === 'denied');
+// pede a permissão e inscreve o celular; devolve true se ficou ativo
+async function ativarNotificacoes(){
+  if (ehIphone() && !jaInstalado()) { alert('No iPhone, os avisos funcionam com o app instalado.\n\nToque em "Baixar app", instale e depois toque em "Ativar" de novo, dentro do app.'); return false; }
+  try {
+    if (await Notification.requestPermission() !== 'granted') { toast('Tudo bem! Você pode ativar depois nas configurações do celular.'); return false; }
+    const reg = await navigator.serviceWorker.ready;
+    const sub = (await reg.pushManager.getSubscription()) || await reg.pushManager.subscribe({userVisibleOnly: true, applicationServerKey: chaveVapid(VAPID)});
+    await servidor('inscrever', {sub: sub.toJSON()});
+    guardar('avisosAtivos', true); toast('Pronto! Os avisos da paróquia vão chegar no seu celular. 🙏'); return true;
+  } catch(e){ toast('Não consegui ativar: ' + e.message); return false; }
+}
 function cartaoNotificacoes(){
   const lugar = $('#cartaoAvisos'); if (!lugar) return;
-  const iphoneSemApp = ehIphone() && !jaInstalado();
-  if (ler('avisosAtivos', false) || (!podeNotificar() && !iphoneSemApp) || (podeNotificar() && Notification.permission === 'denied')) { lugar.innerHTML = ''; return; }
-  lugar.innerHTML = `<div class="notif"><span>🔔</span><div><b>Receba os avisos da paróquia</b><small>Adoração do Dizimista, Domingo do Quilo e outros lembretes no seu celular</small></div><button class="btn ouro" id="ativarAvisos">Ativar</button></div>`;
-  $('#ativarAvisos').onclick = async () => {
-    if (iphoneSemApp) return alert('No iPhone, os avisos funcionam com o app instalado.\n\nToque em "Baixar app", instale e depois toque em "Ativar" de novo, dentro do app.');
-    const b = $('#ativarAvisos'); b.disabled = true;
-    try {
-      if (await Notification.requestPermission() !== 'granted') { toast('Tudo bem! Você pode ativar depois nas configurações do celular.'); lugar.innerHTML = ''; return; }
-      const reg = await navigator.serviceWorker.ready;
-      const sub = (await reg.pushManager.getSubscription()) || await reg.pushManager.subscribe({userVisibleOnly: true, applicationServerKey: chaveVapid(VAPID)});
-      await servidor('inscrever', {sub: sub.toJSON()});
-      guardar('avisosAtivos', true); lugar.innerHTML = ''; toast('Pronto! Você vai receber os avisos da paróquia. 🙏');
-    } catch(e){ b.disabled = false; toast('Não consegui ativar: ' + e.message); }
-  };
+  if (!precisaAtivar()) { lugar.innerHTML = ''; return; }
+  lugar.innerHTML = `<div class="notif"><span>🔔</span><div><b>Receba os avisos da paróquia</b><small>Missas, confissões, eventos, Adoração do Dizimista e Domingo do Quilo no seu celular</small></div><button class="btn ouro" id="ativarAvisos">Ativar</button></div>`;
+  $('#ativarAvisos').onclick = async () => { const b = $('#ativarAvisos'); b.disabled = true; if (await ativarNotificacoes()) lugar.innerHTML = ''; else b.disabled = false; };
+}
+// no primeiro acesso: convite grande para ativar as notificações (volta a aparecer depois de 7 dias se a pessoa deixar para depois)
+function conviteNotificacoes(){
+  if (!precisaAtivar() || $('.arte-fundo') || !$('#entrada').hidden) return;
+  const depois = ler('conviteDepois', 0); if (depois && Date.now() - depois < 7 * 864e5) return;
+  const fundo = document.createElement('div'); fundo.className = 'arte-fundo';
+  fundo.innerHTML = `<div class="arte-caixa convite" role="dialog" aria-label="Ativar avisos da paróquia"><div class="sino">🔔</div>
+    <h2>Os avisos da paróquia chegam por aqui!</h2>
+    <p>Ative as notificações para saber, direto no seu celular, dos horários de missa e confissão, eventos, Adoração do Dizimista e todos os recados da Paróquia Nossa Senhora do Amparo.</p>
+    <button class="btn ouro grande-btn" id="convAtivar">🔔 Ativar os avisos</button><br><button class="depois" id="convDepois">Agora não</button></div>`;
+  document.body.appendChild(fundo);
+  $('#convDepois').onclick = () => { guardar('conviteDepois', Date.now()); fundo.remove(); };
+  $('#convAtivar').onclick = async () => { $('#convAtivar').disabled = true; await ativarNotificacoes(); guardar('conviteDepois', Date.now()); fundo.remove(); cartaoNotificacoes(); };
 }
 
 // ================= EVANGELHO =================
@@ -884,8 +1377,8 @@ async function telaDevocionarios(id){
   app.querySelectorAll('.devs button').forEach(b => b.onclick = () => ir('devocionarios/' + b.dataset.id));
 }
 let tamDev = ler('tamDev', 19);
-function devocionario(d){
-  topo('Devocionário', d.nome.replace(/^Devocionário (de|do|da|dos|das|ao|à)\s+/i, ''));
+function devocionario(d, rotulo){
+  topo(rotulo || 'Devocionário', d.nome.replace(/^Devocionário (de|do|da|dos|das|ao|à)\s+/i, ''));
   const secao = (s, i) => {
     let corpo = '';
     if (s.tipo === 'ladainha') corpo = `<div class="ladainha">${(s.itens || []).map(x => `<div><span>${esc(x.v)}</span>${x.r ? `<em>${esc(x.r)}</em>` : ''}</div>`).join('')}</div>`;
@@ -1030,8 +1523,16 @@ function telaPagamento(tipo){
         `• Valor: ${reais(valor)}\n• Referente a: ${meses}\n` + (envelope ? `• Número do envelope: ${envelope}\n` : '') + `• Telefone: ${telefone}\n\n` +
         `Segue o comprovante. ${T.fecho}`;
       const numero = String(PIX.whatsapp || '').replace(/\D/g, '');
-      window.open(`https://wa.me/${numero}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
-      toast('Na conversa da secretaria, toque no 📎 do WhatsApp, anexe o comprovante e envie.');
+      // alerta grande antes de abrir o WhatsApp: a mensagem vai sem o comprovante, a pessoa precisa anexar lá
+      const fundo = document.createElement('div'); fundo.className = 'arte-fundo';
+      fundo.innerHTML = `<div class="arte-caixa alerta-grande" role="alertdialog" aria-label="Anexe o comprovante"><div class="ic">📎</div>
+        <h2>Não esqueça o comprovante!</h2>
+        <ol><li>O WhatsApp vai abrir com a mensagem pronta.</li><li><b>Antes de enviar</b>, toque no clipe <b>📎</b> (ou no <b>+</b>) do WhatsApp.</li><li>Escolha a foto ou o PDF do <b>comprovante do Pix</b> e envie junto.</li></ol>
+        <button class="btn zap grande-btn" id="alertaOk">${ICONE_ZAP} Entendi, abrir o WhatsApp</button><br><button class="depois link" id="alertaVolta" style="margin-top:12px">Voltar</button></div>`;
+      document.body.appendChild(fundo);
+      $('#alertaVolta').onclick = () => fundo.remove();
+      $('#alertaOk').onclick = () => { fundo.remove(); window.open(`https://wa.me/${numero}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
+        toast('Toque no 📎 do WhatsApp, anexe o comprovante e envie.'); };
     };
   };
 }
@@ -1043,18 +1544,18 @@ function telaCadastroDizimista(){
     <p class="mudo" style="margin:-4px 0 8px">Preencha seus dados. A Pastoral do Dízimo vai receber o seu cadastro e entrar em contato.</p>
     <label>Nome completo<input class="campo" id="cn" required autocomplete="name"></label>
     <label>Telefone (WhatsApp)<input class="campo" id="ct" required inputmode="tel" autocomplete="tel" placeholder="(21) 99999-9999"></label>
-    <label>CPF<input class="campo" id="cc" required inputmode="numeric" placeholder="000.000.000-00"></label>
     <label>Endereço<textarea class="campo" id="ce" required rows="2" autocomplete="street-address" placeholder="Rua, número, bairro, cidade"></textarea></label>
+    <label>CEP <span class="mudo pequeno">(se souber)</span><input class="campo" id="cc" inputmode="numeric" autocomplete="postal-code" placeholder="24400-000"></label>
     <label>Data de aniversário<input class="campo" id="cd" required type="date"></label>
     <input id="csite" name="site" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
     <label class="aceite"><input type="checkbox" id="cok" required> Autorizo a Paróquia Nossa Senhora do Amparo a guardar estes dados para o cadastro de dizimistas.</label>
     <button class="btn ouro grande-btn">Enviar cadastro</button></form></section>`;
   $('#ct').oninput = () => { const d = $('#ct').value.replace(/\D/g, '').slice(0, 11); $('#ct').value = d.length > 6 ? `(${d.slice(0, 2)}) ${d.slice(2, d.length - 4)}-${d.slice(-4)}` : d.length > 2 ? `(${d.slice(0, 2)}) ${d.slice(2)}` : d; };
-  $('#cc').oninput = () => { const d = $('#cc').value.replace(/\D/g, '').slice(0, 11); $('#cc').value = d.replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})\.(\d{3})(\d)/, '$1.$2.$3').replace(/(\d{3})\.(\d{3})\.(\d{3})(\d)/, '$1.$2.$3-$4'); };
+  $('#cc').oninput = () => { const d = $('#cc').value.replace(/\D/g, '').slice(0, 8); $('#cc').value = d.length > 5 ? d.slice(0, 5) + '-' + d.slice(5) : d; };
   $('#fc').onsubmit = async ev => {
     ev.preventDefault(); const b = $('#fc button'); b.disabled = true; b.textContent = 'Enviando…';
     try {
-      await servidor('cadastrar', {nome: $('#cn').value, telefone: $('#ct').value, cpf: $('#cc').value, endereco: $('#ce').value, nascimento: $('#cd').value, site: $('#csite').value});
+      await servidor('cadastrar', {nome: $('#cn').value, telefone: $('#ct').value, cep: $('#cc').value, endereco: $('#ce').value, nascimento: $('#cd').value, site: $('#csite').value});
       app.innerHTML = `<section class="tela"><div class="cartao" style="text-align:center;padding:28px 20px">
         <div style="font-size:44px">🙏</div><h2 class="form-tit">Cadastro enviado!</h2>
         <p>Seja bem-vindo(a) à família dos dizimistas da Paróquia Nossa Senhora do Amparo. A Pastoral do Dízimo vai entrar em contato com você.</p>
@@ -1075,7 +1576,7 @@ async function avisoCadastros(caixa){
     caixa.innerHTML = `${novos.length ? `<button class="aviso-novos" id="avAbrir">🔔 ${novos.length === 1 ? 'Novo dizimista cadastrado' : novos.length + ' novos dizimistas cadastrados'} <span>${abrir ? 'fechar' : 'ver'} ›</span></button>` : ''}
       ${abrir && mostra.length ? `<div class="cadastros">${mostra.map(c => `<div class="cad ${c.visto ? '' : 'novo'}"><b>${esc(c.nome)}</b>
         <span>📞 <a href="https://wa.me/55${esc(String(c.telefone).replace(/\D/g, ''))}" target="_blank" rel="noopener">${esc(c.telefone)}</a></span>
-        <span>CPF ${esc(c.cpf)} · 🎂 ${esc(String(c.nascimento).split('-').reverse().slice(0, 2).join('/'))}</span>
+        <span>🎂 ${esc(String(c.nascimento).split('-').reverse().slice(0, 2).join('/'))}${c.cep ? ' · CEP ' + esc(c.cep) : ''}</span>
         <span>${esc(c.endereco)}</span><small>cadastrado em ${new Date(c.data).toLocaleDateString('pt-BR')}</small></div>`).join('')}
         ${novos.length ? '<button class="btn claro" id="avVisto" style="width:100%">Marcar como visto</button>' : ''}</div>` : ''}
       <p class="pequeno" style="margin:6px 0 0"><button class="link" id="avTodos">${abrir === 'todos' ? 'Esconder cadastros' : 'Ver todos os cadastros pelo app (' + lista.length + ')'}</button></p>`;
@@ -1184,6 +1685,250 @@ function telaCapitulo(l, c){
   $('#menos').onclick = () => ajusta(-2); $('#mais').onclick = () => ajusta(2);
 }
 
+// ================= JANELA (diálogo simples) =================
+function janela(html, classe){
+  const fundo = document.createElement('div'); fundo.className = 'arte-fundo';
+  fundo.innerHTML = `<div class="arte-caixa ${classe || ''}" role="dialog" style="max-width:520px;max-height:90vh;overflow:auto;padding:18px">${html}</div>`;
+  document.body.appendChild(fundo);
+  fundo.onclick = e => { if (e.target === fundo) fundo.remove(); };
+  return fundo;
+}
+const telMask = el => el.oninput = () => { const d = el.value.replace(/\D/g, '').slice(0, 11); el.value = d.length > 6 ? `(${d.slice(0, 2)}) ${d.slice(2, d.length - 4)}-${d.slice(-4)}` : d.length > 2 ? `(${d.slice(0, 2)}) ${d.slice(2)}` : d; };
+const zapLink = t => { let d = String(t || '').replace(/\D/g, ''); if (d.length === 10 || d.length === 11) d = '55' + d; return 'https://wa.me/' + d; };
+const ISCA = '<input name="site" class="isca" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">';
+
+// ================= CAIXINHA DE SUGESTÕES (botão flutuante) =================
+$('#btnSugestao').onclick = () => {
+  const j = janela(`<h2 class="form-tit">💬 Caixinha de sugestões</h2>
+    <p class="mudo" style="margin:6px 0 12px">O que o app ou a nossa igreja podem melhorar? A equipe da paróquia lê todas as mensagens.</p>
+    <form class="form" id="fsug"><div class="escolha-vela"><button type="button" data-s="app" aria-pressed="true">📱 O app</button><button type="button" data-s="igreja" aria-pressed="false">⛪ A igreja</button></div>
+      <textarea class="campo" id="sugTxt" maxlength="1000" required placeholder="Escreva aqui a sua sugestão…"></textarea>
+      <input class="campo" id="sugCont" maxlength="60" placeholder="Seu nome ou telefone (opcional)">${ISCA}
+      <button class="btn ouro grande-btn">Enviar sugestão</button><button type="button" class="btn claro" id="sugFechar">Fechar</button></form>`);
+  let sobre = 'app';
+  j.querySelectorAll('[data-s]').forEach(b => b.onclick = () => { sobre = b.dataset.s; j.querySelectorAll('[data-s]').forEach(x => x.setAttribute('aria-pressed', x === b)); });
+  $('#sugFechar').onclick = () => j.remove();
+  $('#fsug').onsubmit = async ev => { ev.preventDefault(); const b = ev.submitter; b.disabled = true;
+    try { await servidor('feedback', {sobre, texto: $('#sugTxt').value, contato: $('#sugCont').value, site: j.querySelector('.isca').value}); j.remove(); toast('Obrigado! Sua sugestão foi enviada. 🙏'); }
+    catch(e){ toast(e.message); b.disabled = false; } };
+};
+
+// ================= VELAS VIRTUAIS =================
+const velaHtml = (dias) => `<div class="vela ${dias === 7 ? 'v7' : ''}"><div class="halo"></div><div class="corpo"></div><div class="pavio"></div><div class="chama"></div></div>`;
+function restante(ate){ const ms = new Date(ate) - Date.now(); if (ms <= 0) return 'apagando'; const h = Math.round(ms / 36e5); return h >= 48 ? `acesa por mais ${Math.round(h / 24)} dias` : h >= 1 ? `acesa por mais ${h} h` : 'acesa por mais alguns minutos'; }
+async function telaVelas(){
+  topo('Pedidos de oração', 'Acender uma vela');
+  let dias = 1;
+  app.innerHTML = `<section class="tela">
+    <div class="velas-topo">${velaHtml(7)}<h2>Acenda uma vela</h2><p>Deixe sua intenção aos pés de Nossa Senhora do Amparo. A comunidade reza com você.</p></div>
+    <form class="cartao nova-vela" id="fv">
+      <span class="rotulo" style="margin:0">Escolha a sua vela</span>
+      <div class="escolha-vela"><button type="button" data-d="1" aria-pressed="true">🕯️ Vela de 1 dia<small>fica acesa 24 horas</small></button><button type="button" data-d="7" aria-pressed="false">🕯️ Vela de 7 dias<small>fica acesa uma semana</small></button></div>
+      <label class="rotulo" for="vInt" style="margin:0">Sua intenção</label>
+      <textarea class="campo pergaminho-campo" id="vInt" maxlength="280" required placeholder="Ex.: Pela saúde da minha mãe…"></textarea>
+      <input class="campo" id="vNome" maxlength="40" placeholder="Seu nome (opcional)" value="${esc(ler('meuNomeVela',''))}">${ISCA}
+      <button class="btn ouro grande-btn">🕯️ Acender a vela</button>
+      <p class="pequeno mudo" style="margin:0">A intenção fica visível no altar de velas do app. Não escreva telefone nem dados pessoais.</p></form>
+    <h2 class="titulo-sec">Velas acesas</h2><div class="altar" id="altar"><div class="carregando">Acendendo o altar…</div></div></section>`;
+  app.querySelectorAll('[data-d]').forEach(b => b.onclick = () => { dias = +b.dataset.d; app.querySelectorAll('[data-d]').forEach(x => x.setAttribute('aria-pressed', x === b)); });
+  const pode = !!sessao.papel;
+  const desenha = velas => {
+    $('#altar').innerHTML = velas.length ? velas.map(v => `<div class="pedido-vela">${velaHtml(v.dias)}<div class="tipo">Vela de ${v.dias === 7 ? '7 dias' : '1 dia'} · ${restante(v.ate)}</div>
+      <div class="pergaminho">${esc(v.intencao)}${v.nome ? `<cite>— ${esc(v.nome)}</cite>` : ''}</div>
+      ${pode ? `<button class="link pequeno" data-apagar="${esc(v.id)}" style="color:#E3C27A;margin-top:8px">Retirar</button>` : ''}</div>`).join('')
+      : '<p class="mudo">Nenhuma vela acesa agora. Acenda a primeira!</p>';
+    $('#altar').querySelectorAll('[data-apagar]').forEach(b => b.onclick = async () => { if (!confirm('Retirar esta vela do altar?')) return;
+      try { desenha((await servidor('apagarVela', {id: b.dataset.apagar})).velas); } catch(e){ toast(e.message); } });
+  };
+  servidorGet('velas').then(j => desenha(j.velas || [])).catch(() => { const a = $('#altar'); if (a) a.innerHTML = '<p class="mudo">Sem conexão para ver o altar agora.</p>'; });
+  $('#fv').onsubmit = async ev => {
+    ev.preventDefault(); const b = ev.submitter; b.disabled = true; b.textContent = 'Acendendo…';
+    const nome = $('#vNome').value.trim(); guardar('meuNomeVela', nome);
+    try {
+      const j = await servidor('acenderVela', {intencao: $('#vInt').value, nome, dias, site: app.querySelector('.isca').value});
+      desenha(j.velas); $('#vInt').value = '';
+      janela(`<div style="text-align:center"><div class="velas-topo" style="padding:26px 10px">${velaHtml(dias)}<h2>Sua vela está acesa</h2><p>Nossa Senhora do Amparo, rogai por nós!</p></div>
+        <button class="btn ouro grande-btn" style="margin-top:12px" onclick="this.closest('.arte-fundo').remove()">Amém 🙏</button></div>`);
+      $('#altar').scrollIntoView({behavior:'smooth'});
+    } catch(e){ toast(e.message); }
+    b.disabled = false; b.textContent = '🕯️ Acender a vela';
+  };
+}
+
+// ================= TERÇOS =================
+async function telaTercos(id){
+  topo('Oração', 'Terços');
+  let D; try { D = await carregar('tercos'); } catch(e){ app.innerHTML = '<section class="tela"><div class="aviso erro">Não consegui abrir os terços.</div></section>'; return; }
+  const d = id && D.find(x => x.id === id);
+  if (d) return devocionario(d, 'Terço');
+  const dia = DIAS_SEM[hoje().getDay()];
+  app.innerHTML = `<section class="tela"><p class="mudo" style="margin:0 0 12px">Hoje é ${esc(dia)}. Os terços indicados para hoje aparecem com ★.</p>
+    <div class="devs">${D.map(x => { const hojeSim = norm(x.quando || '').includes(norm(dia.split('-')[0]));
+      return `<button data-id="${esc(x.id)}" style="--cor:${esc(x.cor || '#0B2F6B')}"><b>${hojeSim ? '★ ' : ''}${esc(x.nome)}</b><span>${esc(x.sub || '')}</span><small>${esc(x.quando || '')}</small></button>`; }).join('')}</div></section>`;
+  app.querySelectorAll('.devs button').forEach(b => b.onclick = () => ir('tercos/' + b.dataset.id));
+}
+
+// ================= CONFISSÃO E EXAME DE CONSCIÊNCIA =================
+let tamEx = ler('tamEx', 18);
+async function telaConfissao(){
+  topo('Sacramento da Reconciliação', 'Confissão');
+  const hor = ler('horarios', []);
+  app.innerHTML = `<section class="tela">
+    <div class="horarios" style="margin-top:0"><h2>🕊️ Horários de confissão</h2><div id="hConf">${horariosHtml(hor, 'Confissão') || '<p class="mudo" style="margin:0">A Pascom ainda não cadastrou os horários. Procure a secretaria da paróquia.</p>'}</div></div>
+    <div id="exame"><div class="carregando">Abrindo o exame de consciência…</div></div></section>`;
+  servidorGet('inicio').then(j => { if (j.horarios) { guardar('horarios', j.horarios); const h = horariosHtml(j.horarios, 'Confissão'); if (h && $('#hConf')) $('#hConf').innerHTML = h; } }).catch(() => {});
+  let E; try { E = await carregar('exame'); } catch(e){ $('#exame').innerHTML = '<div class="aviso erro">Não consegui abrir o exame de consciência.</div>'; return; }
+  const marc = ler('exameMarcas', {});
+  $('#exame').innerHTML = `<h2 class="titulo-sec">${esc(E.titulo || 'Exame de consciência')}</h2>
+    <p>${esc(E.intro || '')}</p>
+    <p class="pequeno mudo">As marcações ficam só neste celular, ninguém mais vê. Use como lembrete na hora da confissão e apague depois.</p>
+    <div class="tamanho"><button id="menos" aria-label="Diminuir letra">A−</button><button id="mais" aria-label="Aumentar letra">A+</button></div>
+    <div id="exTxt" style="font-size:${tamEx}px">
+      ${E.oracaoAntes ? `<article class="cartao dev-sec"><h3>Antes de começar</h3><div class="reza">${paragrafos(E.oracaoAntes)}</div></article>` : ''}
+      ${(E.partes || []).map((p, i) => `<article class="cartao exame-parte"><h3>${esc(p.titulo)}</h3>${p.intro ? `<p class="mudo" style="margin:0 0 6px">${esc(p.intro)}</p>` : ''}
+        ${(p.perguntas || []).map((q, k) => `<label class="pergunta"><input type="checkbox" data-k="${i}-${k}" ${marc[i + '-' + k] ? 'checked' : ''}><span>${esc(q)}</span></label>`).join('')}</article>`).join('')}
+      ${(E.comoConfessar || []).length ? `<article class="cartao dev-sec"><h3>Como se confessar</h3>${E.comoConfessar.map(x => `<details class="passo"><summary>${esc(x.titulo)}</summary>${paragrafos(x.texto)}</details>`).join('')}</article>` : ''}
+      ${E.atoContricao ? `<article class="cartao dev-sec"><h3>Ato de contrição</h3><div class="reza">${paragrafos(E.atoContricao)}</div></article>` : ''}
+      ${E.oracaoDepois ? `<article class="cartao dev-sec"><h3>Depois da confissão</h3><div class="reza">${paragrafos(E.oracaoDepois)}</div></article>` : ''}
+    </div>
+    <p style="text-align:center"><button class="btn claro" id="limparEx">Apagar minhas marcações</button></p>`;
+  $('#exame').querySelectorAll('[data-k]').forEach(c => c.onchange = () => { const m = ler('exameMarcas', {}); if (c.checked) m[c.dataset.k] = 1; else delete m[c.dataset.k]; guardar('exameMarcas', m); });
+  $('#limparEx').onclick = () => { guardar('exameMarcas', {}); $('#exame').querySelectorAll('[data-k]').forEach(c => c.checked = false); toast('Marcações apagadas'); };
+  const ajusta = n => { tamEx = Math.max(15, Math.min(28, tamEx + n)); guardar('tamEx', tamEx); $('#exTxt').style.fontSize = tamEx + 'px'; };
+  $('#menos').onclick = () => ajusta(-2); $('#mais').onclick = () => ajusta(2);
+}
+
+// ================= BAZAR =================
+// fotos reduzidas no próprio celular antes de subir (até 1000 px, JPEG)
+function reduzirFoto(arq){
+  return new Promise((ok, erro) => { const img = new Image(), url = URL.createObjectURL(arq);
+    img.onload = () => { const max = 1000, k = Math.min(1, max / Math.max(img.width, img.height)); const c = document.createElement('canvas');
+      c.width = Math.round(img.width * k); c.height = Math.round(img.height * k); c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(url); ok(c.toDataURL('image/jpeg', .82).split(',')[1]); };
+    img.onerror = () => { URL.revokeObjectURL(url); erro(new Error('Não consegui ler a foto')); }; img.src = url; });
+}
+async function telaBazar(){
+  topo('Paróquia', 'Bazar');
+  const equipe = ehDizimo();
+  app.innerHTML = `<section class="tela">
+    <div class="baz-topo"><h2>🛍️ Bazar da Paróquia</h2><p>Peças doadas pela comunidade. Toda a renda ajuda a nossa paróquia. Gostou? Toque em <b>Reservar</b> e retire na secretaria.</p></div>
+    ${equipe ? `<form class="cartao form" id="fpeca" style="margin-top:16px"><h2 class="form-tit">Cadastrar peça</h2>
+      <label>Fotos (até 4)<input class="campo" id="pFotos" type="file" accept="image/*" multiple></label><div class="miniaturas" id="pMini"></div>
+      <label>Nome da peça<input class="campo" id="pTit" maxlength="80" required placeholder="Ex.: Vestido longo azul, tam. M"></label>
+      <label>Descrição<textarea class="campo" id="pDesc" maxlength="400" rows="2" placeholder="Estado, tamanho, detalhes"></textarea></label>
+      <label>Preço<input class="campo valor" id="pPreco" inputmode="decimal" placeholder="R$ 0,00"></label>
+      <button class="btn ouro grande-btn">Publicar no bazar</button></form>
+      <div class="secao-equipe" id="reservas"></div>` : ''}
+    <div class="vitrine-grade" id="pecas"><div class="carregando">Carregando as peças…</div></div></section>`;
+  const desenha = (pecas, reservas) => {
+    $('#pecas').innerHTML = pecas.length ? pecas.map(p => `<div class="peca"><div class="fotos-peca">${p.fotos.map(f => `<img src="${esc(f)}" alt="${esc(p.titulo)}" loading="lazy">`).join('')}</div>
+      <div class="info"><b>${esc(p.titulo)}</b>${p.descricao ? `<span class="pequeno mudo">${esc(p.descricao)}</span>` : ''}<span class="preco">${p.preco ? reais(p.preco) : 'Doação'}</span>
+      ${p.status !== 'Disponível' ? `<span class="st">${esc(p.status)}</span>` : ''}
+      ${p.status === 'Disponível' ? `<button class="btn ouro" data-res="${esc(p.id)}">Reservar</button>` : ''}
+      ${equipe ? `<select class="campo" data-st="${esc(p.id)}" style="padding:8px;font-size:14px">${['Disponível','Reservado','Vendido','Retirar'].map(s => `<option ${s === p.status ? 'selected' : ''}>${s}</option>`).join('')}</select>` : ''}</div></div>`).join('')
+      : '<p class="mudo">Nenhuma peça no bazar agora. Volte em breve!</p>';
+    $('#pecas').querySelectorAll('[data-res]').forEach(b => b.onclick = () => reservarPeca(pecas.find(p => p.id === b.dataset.res), desenha));
+    $('#pecas').querySelectorAll('[data-st]').forEach(s => s.onchange = async () => { if (s.value === 'Retirar' && !confirm('Tirar esta peça do bazar?')) return;
+      try { const j = await servidor('statusPeca', {id: s.dataset.st, status: s.value}); desenha(j.pecas, j.reservas); } catch(e){ toast(e.message); } });
+    if (equipe && reservas) {
+      const novas = reservas.filter(r => !r.visto);
+      $('#reservas').innerHTML = `<h2>Reservas ${novas.length ? `<span class="status aguarda">${novas.length} nova(s)</span>` : ''}</h2>${reservas.length ? reservas.slice(0, 30).map(r => `<div class="item-equipe ${r.visto ? '' : 'novo'}"><b>${esc(r.titulo)}</b>
+        <span>${esc(r.nome)} · <a href="${zapLink(r.telefone)}" target="_blank" rel="noopener">${esc(r.telefone)}</a></span>${r.obs ? `<span class="mudo">${esc(r.obs)}</span>` : ''}<small class="mudo">${new Date(r.data).toLocaleString('pt-BR')}</small></div>`).join('')
+        + (novas.length ? '<button class="btn claro" id="resVistas">Marcar reservas como vistas</button>' : '') : '<p class="mudo">Nenhuma reserva ainda.</p>'}`;
+      const rv = $('#resVistas'); if (rv) rv.onclick = async () => { try { const j = await servidor('reservasVistas'); desenha(j.pecas, j.reservas); } catch(e){ toast(e.message); } };
+    }
+  };
+  (equipe ? servidor('bazarEquipe') : servidorGet('bazar')).then(j => desenha(j.pecas || [], j.reservas)).catch(e => { const p = $('#pecas'); if (p) p.innerHTML = `<p class="mudo">${esc(e.message)}</p>`; });
+  const f = $('#fpeca'); if (!f) return;
+  let fotos = [];
+  $('#pFotos').onchange = async () => { fotos = []; $('#pMini').innerHTML = 'Preparando as fotos…';
+    try { for (const a of [...$('#pFotos').files].slice(0, 4)) fotos.push(await reduzirFoto(a)); } catch(e){ toast(e.message); }
+    $('#pMini').innerHTML = fotos.map(b => `<img src="data:image/jpeg;base64,${b}" alt="">`).join(''); };
+  $('#pPreco').onblur = () => { const v = lerValor($('#pPreco').value); if (v) $('#pPreco').value = reais(v); };
+  f.onsubmit = async ev => { ev.preventDefault(); if (!fotos.length) return toast('Coloque pelo menos uma foto');
+    const b = ev.submitter; b.disabled = true; b.textContent = 'Publicando…';
+    try { const j = await servidor('peca', {titulo: $('#pTit').value, descricao: $('#pDesc').value, preco: lerValor($('#pPreco').value), fotos});
+      desenha(j.pecas, j.reservas); f.reset(); fotos = []; $('#pMini').innerHTML = ''; toast('Peça publicada no bazar!'); }
+    catch(e){ toast(e.message); }
+    b.disabled = false; b.textContent = 'Publicar no bazar'; };
+}
+function reservarPeca(p, desenha){
+  if (!p) return;
+  const eu = ler('pagador', {});
+  const j = janela(`<h2 class="form-tit">Reservar: ${esc(p.titulo)}</h2><p class="mudo" style="margin:6px 0 12px">${p.preco ? reais(p.preco) + ' · ' : ''}A secretaria guarda a peça para você. Retire e pague na paróquia.</p>
+    <form class="form" id="fres"><label>Nome completo<input class="campo" id="rNome" required autocomplete="name" value="${esc(eu.nome || '')}"></label>
+    <label>Telefone (WhatsApp)<input class="campo" id="rTel" required inputmode="tel" value="${esc(eu.telefone || '')}" placeholder="(21) 99999-9999"></label>
+    <label>Observação <span class="mudo pequeno">(opcional)</span><input class="campo" id="rObs" maxlength="200" placeholder="Ex.: retiro no domingo depois da missa"></label>${ISCA}
+    <button class="btn ouro grande-btn">Confirmar reserva</button><button type="button" class="btn claro" id="rFechar">Voltar</button></form>`);
+  telMask($('#rTel')); $('#rFechar').onclick = () => j.remove();
+  $('#fres').onsubmit = async ev => { ev.preventDefault(); const b = ev.submitter; b.disabled = true;
+    try { const r = await servidor('reservar', {id: p.id, nome: $('#rNome').value, telefone: $('#rTel').value, obs: $('#rObs').value, site: j.querySelector('.isca').value});
+      j.remove(); desenha(r.pecas); janela(`<div style="text-align:center"><div style="font-size:48px">🛍️</div><h2 class="form-tit">Reserva feita!</h2><p>A peça <b>${esc(p.titulo)}</b> está guardada para você. Retire na secretaria da paróquia. Deus abençoe!</p><button class="btn ouro grande-btn" onclick="this.closest('.arte-fundo').remove()">Amém 🙏</button></div>`); }
+    catch(e){ toast(e.message); b.disabled = false; } };
+}
+
+// ================= VITRINE DO AMPARO =================
+const CATEGORIAS = ['Alimentação','Beleza e estética','Saúde','Casa e reformas','Serviços','Moda','Educação e aulas','Festas e eventos','Transporte','Outros'];
+async function telaVitrine(){
+  topo('Comunidade', 'Vitrine do Amparo');
+  let cat = 'Todas';
+  app.innerHTML = `<section class="tela">
+    <div class="vit-topo"><h2>🏪 Vitrine do Amparo</h2><p>Comércios, serviços e talentos da nossa comunidade. Precisou de algo? Dê preferência a quem reza com você!</p></div>
+    <button class="btn ouro grande-btn" id="anunciar" style="margin-top:14px">📣 Anunciar meu comércio ou atividade</button>
+    <div class="busca" style="margin-top:14px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input class="campo" id="qv" type="search" placeholder="O que você procura? (bolo, eletricista, aula…)" aria-label="Buscar na vitrine"></div>
+    <div class="chips" id="cats"></div><div class="lista" id="anuncios"><div class="carregando">Carregando…</div></div></section>`;
+  let lista = [];
+  const desenha = () => {
+    const cats = ['Todas', ...CATEGORIAS.filter(c => lista.some(a => a.categoria === c))];
+    $('#cats').innerHTML = cats.map(c => `<button aria-pressed="${c === cat}">${esc(c)}</button>`).join('');
+    $('#cats').querySelectorAll('button').forEach(b => b.onclick = () => { cat = b.textContent; desenha(); });
+    const q = norm($('#qv').value).trim();
+    const r = lista.filter(a => (cat === 'Todas' || a.categoria === cat) && (!q || norm([a.negocio, a.descricao, a.categoria, a.nome].join(' ')).includes(q)));
+    $('#anuncios').innerHTML = r.length ? r.map(a => `<div class="anuncio"><span class="cat">${esc(a.categoria || 'Outros')}</span><b>${esc(a.negocio)}</b>
+      ${a.descricao ? `<span>${esc(a.descricao)}</span>` : ''}<span class="pequeno mudo">com ${esc(a.nome)}</span>
+      <div class="acoes"><a class="btn zap" href="${zapLink(a.telefone)}" target="_blank" rel="noopener">${ICONE_ZAP} Chamar no WhatsApp</a>
+        ${a.instagram ? `<a class="btn claro" href="https://instagram.com/${encodeURIComponent(a.instagram)}" target="_blank" rel="noopener">@${esc(a.instagram)}</a>` : ''}</div></div>`).join('')
+      : `<p class="mudo">${lista.length ? 'Nada encontrado.' : 'A vitrine está começando. Seja o primeiro a anunciar!'}</p>`;
+  };
+  $('#qv').oninput = desenha;
+  servidorGet('vitrine').then(j => { lista = j.anuncios || []; desenha(); }).catch(() => { const a = $('#anuncios'); if (a) a.innerHTML = '<p class="mudo">Sem conexão agora.</p>'; });
+  $('#anunciar').onclick = () => {
+    const j = janela(`<h2 class="form-tit">Anunciar na Vitrine</h2><p class="mudo" style="margin:6px 0 12px">É de graça. A equipe da paróquia confere o anúncio antes de ele aparecer.</p>
+      <form class="form" id="fan"><label>Nome do comércio ou serviço<input class="campo" id="aNeg" maxlength="60" required placeholder="Ex.: Bolos da Dona Maria"></label>
+      <label>Categoria<select class="campo" id="aCat">${CATEGORIAS.map(c => `<option>${c}</option>`).join('')}</select></label>
+      <label>O que você oferece<textarea class="campo" id="aDesc" maxlength="300" rows="3" placeholder="Ex.: bolos caseiros por encomenda, entrego no bairro"></textarea></label>
+      <label>Seu nome<input class="campo" id="aNome" maxlength="60" required autocomplete="name"></label>
+      <label>WhatsApp<input class="campo" id="aTel" required inputmode="tel" placeholder="(21) 99999-9999"></label>
+      <label>Instagram <span class="mudo pequeno">(opcional)</span><input class="campo" id="aIg" maxlength="40" placeholder="@seuperfil"></label>${ISCA}
+      <label class="aceite"><input type="checkbox" required> Autorizo mostrar estes dados na Vitrine do app da paróquia.</label>
+      <button class="btn ouro grande-btn">Enviar anúncio</button><button type="button" class="btn claro" id="aFechar">Voltar</button></form>`);
+    telMask($('#aTel')); $('#aFechar').onclick = () => j.remove();
+    $('#fan').onsubmit = async ev => { ev.preventDefault(); const b = ev.submitter; b.disabled = true;
+      try { await servidor('anunciar', {negocio: $('#aNeg').value, categoria: $('#aCat').value, descricao: $('#aDesc').value, nome: $('#aNome').value, telefone: $('#aTel').value, instagram: $('#aIg').value, site: j.querySelector('.isca').value});
+        j.remove(); toast('Anúncio enviado! Ele aparece depois que a equipe conferir. 🙏'); }
+      catch(e){ toast(e.message); b.disabled = false; } };
+  };
+}
+
+// ================= EQUIPE: sugestões e vitrine para aprovar =================
+async function secoesEquipe(caixa){
+  caixa.innerHTML = `<div class="secao-equipe" id="eqVitrine"></div><div class="secao-equipe" id="eqSug"></div>`;
+  const vit = lista => { const pend = lista.filter(a => !a.aprovado);
+    $('#eqVitrine').innerHTML = `<h2>🏪 Vitrine: anúncios para conferir</h2>${pend.length ? pend.map(a => `<div class="item-equipe novo"><b>${esc(a.negocio)}</b><span>${esc(a.categoria)} · ${esc(a.nome)} · ${esc(a.telefone)}${a.instagram ? ' · @' + esc(a.instagram) : ''}</span>${a.descricao ? `<span class="mudo">${esc(a.descricao)}</span>` : ''}
+      <div class="acoes"><button class="btn" data-ok="${esc(a.id)}">Aprovar</button><button class="btn claro" data-no="${esc(a.id)}">Recusar</button></div></div>`).join('') : '<p class="mudo">Nenhum anúncio esperando.</p>'}
+      <p class="pequeno mudo">${lista.filter(a => a.aprovado).length} anúncio(s) no ar. <button class="link" onclick="location.hash='vitrine'">Ver a Vitrine</button></p>`;
+    $('#eqVitrine').querySelectorAll('[data-ok],[data-no]').forEach(b => b.onclick = async () => {
+      const apagar = !!b.dataset.no; if (apagar && !confirm('Recusar e apagar este anúncio?')) return;
+      try { vit((await servidor('aprovarAnuncio', {id: b.dataset.ok || b.dataset.no, apagar})).anuncios); } catch(e){ toast(e.message); } }); };
+  const sug = lista => { const novas = lista.filter(s => !s.visto);
+    $('#eqSug').innerHTML = `<h2>💬 Caixinha de sugestões ${novas.length ? `<span class="status aguarda">${novas.length} nova(s)</span>` : ''}</h2>${lista.length ? lista.slice(0, 40).map(s => `<div class="item-equipe ${s.visto ? '' : 'novo'}"><span class="pequeno" style="font-weight:800;color:var(--ouro)">Sobre ${esc(s.sobre)}</span><span>${esc(s.texto)}</span>
+      <small class="mudo">${s.contato ? esc(s.contato) + ' · ' : ''}${new Date(s.data).toLocaleDateString('pt-BR')}</small></div>`).join('') + (novas.length ? '<button class="btn claro" id="sugVistas">Marcar como lidas</button>' : '') : '<p class="mudo">Nenhuma sugestão ainda.</p>'}`;
+    const v = $('#sugVistas'); if (v) v.onclick = async () => { try { sug((await servidor('sugestoesVistas')).lista); } catch(e){ toast(e.message); } }; };
+  servidor('vitrineEquipe').then(j => vit(j.anuncios)).catch(e => $('#eqVitrine').textContent = e.message);
+  servidor('sugestoes').then(j => sug(j.lista)).catch(e => $('#eqSug').textContent = e.message);
+}
+
 // ================= PASTORAL DO DÍZIMO =================
 // A arte fica privada no Drive da pastoral; o servidor só a entrega para quem entrou com PIN.
 async function verArte(botao){
@@ -1213,6 +1958,13 @@ async function verArte(botao){
 
 const cores = ['#FFF3A6','#FFD9E1','#D7F0FF','#DDF5D3','#FFE3C2','#EADCFF'];
 async function telaPastoral(){
+  if (sessao.papel === 'pascom') {
+    topo('Acesso restrito', 'Área da Pascom');
+    app.innerHTML = `<section class="tela"><div class="cartao"><b style="font-family:var(--disp);font-size:24px;color:var(--azul)">📣 Avisos e horários</b>
+      <p class="mudo" style="margin:6px 0 10px">Os avisos e os horários de missa e confissão são publicados direto na tela de início, que é a primeira coisa que os fiéis veem.</p>
+      <button class="btn ouro" onclick="location.hash='inicio'">Ir para o início e publicar</button></div><div id="equipe"></div></section>`;
+    return secoesEquipe($('#equipe'));
+  }
   topo('Acesso restrito','Pastoral do Dízimo');
   const agora = hoje(); const padrao = agora.getDate() >= 15 ? somaDias(new Date(agora.getFullYear(), agora.getMonth()+1, 1), 0) : agora;
   app.innerHTML = `<section class="tela">
@@ -1229,7 +1981,10 @@ async function telaPastoral(){
       <button class="btn ouro" id="pedir"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 15l5-5 4 4 3-3 6 6"/><circle cx="15.5" cy="8.5" r="1.5"/></svg>Confeccionar cartaz dos aniversariantes do mês</button>
       <h3 style="margin:22px 0 6px;font-size:15px;color:var(--mudo);text-transform:uppercase;letter-spacing:.08em">Pedidos</h3>
       <div id="pedidos" class="mudo">Carregando…</div>
-    </div></section>`;
+    </div>
+    <button class="grande largo" style="margin-top:22px;width:100%" onclick="location.hash='bazar'"><div class="ic">🛍️</div><div><b>Bazar: cadastrar peças e ver reservas</b><span>Fotos, preços e quem reservou</span></div></button>
+    <div id="equipe"></div></section>`;
+  secoesEquipe($('#equipe'));
 
   const desenhaNotas = recados => {
     $('#notas').innerHTML = recados.length ? recados.map((r,i) => `<div class="nota" style="background:${cores[i%cores.length]};--rot:${((i*37)%5-2)*.7}deg">${esc(r.texto)}
@@ -1278,8 +2033,137 @@ async function telaPastoral(){
   };
 }
 
+// ================= TELA DE ENTRADA com pontos 3D (mesmo motor do site novo do GDC) =================
+// Aparecida → formas geométricas 3D → Nossa Senhora do Amparo, em loop. As figuras vêm de img/aparecida.png e
+// img/amparo.png (silhueta escura sobre fundo branco); sem elas, ficam só as formas.
+function pontos3D(cv, legenda){
+  const N = 3200, TAU = Math.PI * 2, ctx = cv.getContext('2d');
+  const esfera = () => { const o = [], g = Math.PI * (3 - Math.sqrt(5)); for (let i = 0; i < N; i++) { const y = 1 - (i / (N - 1)) * 2, r = Math.sqrt(1 - y * y), t = g * i; o.push([Math.cos(t) * r * .85, y * .85, Math.sin(t) * r * .85]); } return o; };
+  const anel = () => { const o = [], a = Math.ceil(Math.sqrt(N * 3)), b = Math.ceil(N / a); for (let i = 0; i < a; i++) for (let j = 0; j < b && o.length < N; j++) { const u = i / a * TAU, v = j / b * TAU, R = .68, r = .26; o.push([(R + r * Math.cos(v)) * Math.cos(u), r * Math.sin(v), (R + r * Math.cos(v)) * Math.sin(u)]); } while (o.length < N) o.push(o[o.length % a]); return o; };
+  const cubo = () => { const o = [], k = Math.ceil(Math.sqrt(N / 6)) + 1, f = []; for (let i = 0; i < k; i++) for (let j = 0; j < k; j++) { const a = -1 + 2 * i / (k - 1), b = -1 + 2 * j / (k - 1); f.push([a, b, 1], [a, b, -1], [a, 1, b], [a, -1, b], [1, a, b], [-1, a, b]); } for (let i = 0; i < N; i++) { const p = f[Math.floor(i * f.length / N)]; o.push([p[0] * .6, p[1] * .6, p[2] * .6]); } return o; };
+  const estrela = () => { const o = []; for (let i = 0; i < N; i++) { const k = i % 10, a1 = k * Math.PI / 5 - Math.PI / 2, a2 = (k + 1) * Math.PI / 5 - Math.PI / 2, r1 = k % 2 ? .38 : .9, r2 = k % 2 ? .9 : .38, t = (i * 0.618) % 1, q = Math.sqrt(((i * 0.381) % 1)); const x = (Math.cos(a1) * r1 * (1 - t) + Math.cos(a2) * r2 * t) * q, y = (Math.sin(a1) * r1 * (1 - t) + Math.sin(a2) * r2 * t) * q; o.push([x, y, ((i % 5) / 4 - .5) * .3]); } return o; };
+  // figura: pontos sorteados nos pixels escuros da silhueta, em duas camadas (frente e trás), como o "S" do GDC
+  const daImagem = src => new Promise(ok => { const im = new Image(); im.onload = () => {
+      const T = 300, c = document.createElement('canvas'); c.width = c.height = T; const g = c.getContext('2d', {willReadFrequently: true});
+      const k = Math.min(T / im.width, T / im.height); g.fillStyle = '#fff'; g.fillRect(0, 0, T, T); g.drawImage(im, (T - im.width * k) / 2, (T - im.height * k) / 2, im.width * k, im.height * k);
+      const d = g.getImageData(0, 0, T, T).data, escuro = (x, y) => x >= 0 && y >= 0 && x < T && y < T && (d[(y * T + x) * 4] < 140);
+      // contornos (escuro encostado no branco) recebem a maior parte dos pontos: assim aparecem rosto, coroa, Menino e manto
+      const borda = [], miolo = [];
+      for (let y = 0; y < T; y++) for (let x = 0; x < T; x++) { if (!escuro(x, y)) continue;
+        const b = !escuro(x + 1, y) || !escuro(x - 1, y) || !escuro(x, y + 1) || !escuro(x, y - 1); (b ? borda : (x + y) % 3 ? null : miolo)?.push([x / T * 2 - 1, y / T * 2 - 1]); }
+      if (borda.length < 150) return ok(null);
+      const o = [], nb = Math.round(N * .72);
+      for (let i = 0; i < N; i++) { const l = i < nb ? borda : (miolo.length ? miolo : borda), p = l[Math.floor(((i < nb ? i : i - nb) * 0.6180339 % 1) * l.length)];
+        o.push([p[0] * .97, p[1] * .97, i < nb ? (i % 2 ? .05 : -.05) : (i % 2 ? .14 : -.14)]); }
+      ok(o); }; im.onerror = () => ok(null); im.src = src; });
+  const brilho = Array.from({length: N}, (_, i) => (i * 7919) % 13 === 0); // algumas faíscas douradas
+  const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  const MUDA = 1500;
+  let CENAS = [{f: esfera(), nome: '', parado: 2600}], w = 0, h = 0, dpr = 1, raf = 0, parar = false;
+  let atual = 0, tCena = performance.now();
+  Promise.all([daImagem('img/aparecida.png'), daImagem('img/amparo.png')]).then(([ap, am]) => {
+    const formas = [{f: esfera(), nome: '', parado: 2200}, {f: anel(), nome: '', parado: 2200}, {f: cubo(), nome: '', parado: 2200}, {f: estrela(), nome: '', parado: 2200}];
+    CENAS = [];
+    if (ap) CENAS.push({f: ap, nome: 'Nossa Senhora Aparecida', parado: 4200, figura: true});
+    CENAS.push(...formas);
+    if (am) CENAS.push({f: am, nome: 'Nossa Senhora do Amparo', parado: 4800, figura: true});
+    tCena = performance.now(); atual = 0; mostraNome();
+  });
+  const mostraNome = () => { if (!legenda) return; legenda.style.opacity = 0; setTimeout(() => { legenda.textContent = CENAS[atual].nome || ''; legenda.style.opacity = 1; }, 350); };
+  const medir = () => { dpr = Math.min(2, window.devicePixelRatio || 1); w = cv.clientWidth; h = cv.clientHeight; cv.width = w * dpr; cv.height = h * dpr; };
+  medir(); addEventListener('resize', medir);
+  const t0 = performance.now();
+  const desenhar = agora => {
+    const A = CENAS[atual], B = CENAS[(atual + 1) % CENAS.length], dentro = agora - tCena;
+    if (dentro > A.parado + MUDA) { atual = (atual + 1) % CENAS.length; tCena = agora; mostraNome(); return desenhar(agora); }
+    const k = dentro < A.parado ? 0 : ease((dentro - A.parado) / MUDA), a = A.f, b = B.f;
+    const el = agora - t0, figura = A.figura && k < .5 || B.figura && k >= .5;
+    // as santas só balançam um pouco (para continuarem reconhecíveis); as formas giram mais
+    const ry = Math.sin(el / 1500) * (figura ? .45 : .95), rx = Math.sin(el / 2300) * .2;
+    const cy = Math.cos(ry), sy = Math.sin(ry), cx = Math.cos(rx), sx = Math.sin(rx);
+    const esc = Math.min(w, h) * .45, ox = w / 2, oy = h / 2;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, w, h);
+    const sopro = Math.sin(k * Math.PI) * .2, pts = new Array(N);
+    for (let i = 0; i < N; i++) {
+      let x = a[i][0] + (b[i][0] - a[i][0]) * k, y = a[i][1] + (b[i][1] - a[i][1]) * k, z = a[i][2] + (b[i][2] - a[i][2]) * k;
+      x *= 1 + sopro; y *= 1 + sopro; z *= 1 + sopro;
+      const x1 = x * cy + z * sy, z1 = -x * sy + z * cy, y1 = y * cx - z1 * sx, z2 = y * sx + z1 * cx, p = 2.6 / (2.6 + z2);
+      pts[i] = [ox + x1 * esc * p, oy + y1 * esc * p, z2, i];
+    }
+    pts.sort((p, q) => q[2] - p[2]);
+    for (const [px, py, z, i] of pts) {
+      const prof = (1 - z) / 2, r = (figura ? .45 + prof * .7 : .6 + prof * 1.1) * (esc / 95);
+      ctx.globalAlpha = .45 + prof * .55;
+      ctx.fillStyle = brilho[i] ? '#FFF4CC' : figura ? (prof > .5 ? '#F3D58A' : '#BFD6F5') : prof > .62 ? '#E3B23C' : prof > .38 ? '#8FB3E0' : '#4F7BC4';
+      ctx.beginPath(); ctx.arc(px, py, r, 0, TAU); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+  };
+  const quadro = agora => { raf = 0; if (parar || !cv.isConnected) return; if (!document.hidden && cv.offsetParent !== null) desenhar(agora); raf = requestAnimationFrame(quadro); };
+  raf = requestAnimationFrame(quadro);
+  return () => { parar = true; removeEventListener('resize', medir); };
+}
+
+// tutorial animado: como instalar no iPhone (Safari → Compartilhar → Adicionar à Tela de Início → Adicionar)
+function tutorialIphone(){
+  const j = janela(`<div class="tut"><h2>Instalar no iPhone</h2><p class="mudo" style="margin:0">Abra este app no <b>Safari</b> e siga os passos:</p>
+    <div class="iphone"><div class="tela-i"><div class="site"></div>
+      <div class="barra"><span>‹</span><span>›</span><span class="comp">⬆︎</span><span>📖</span><span>⧉</span></div>
+      <div class="folha" id="tFolha"><div>Copiar <span>⧉</span></div><div>Adicionar aos Favoritos <span>☆</span></div><div class="alvo">Adicionar à Tela de Início <span>⊞</span></div><div>Imprimir <span>🖨</span></div></div>
+      <div class="add" id="tAdd"><span class="ok" id="tOk">Adicionar</span><img src="${esc($('#entLogo').src)}" alt=""><b>App Amparo</b><span>Ícone na tela de início</span></div>
+      <div class="pulso" id="tPulso"></div><div class="dedo" id="tDedo">👆</div></div></div>
+    <p class="passo-txt" id="tTxt"></p><div class="bolinhas" id="tBol"><i></i><i></i><i></i><i></i></div>
+    <button class="btn ouro grande-btn" id="tFechar" style="margin-top:14px">Entendi</button></div>`);
+  j.style.zIndex = 120;
+  const P = [
+    {txt: '1. Toque no botão Compartilhar (quadrado com seta para cima), embaixo da tela.', x: 100, y: 352},
+    {txt: '2. Na lista, toque em "Adicionar à Tela de Início".', x: 150, y: 205},
+    {txt: '3. Toque em "Adicionar", no canto de cima.', x: 170, y: 20},
+    {txt: '4. Pronto! O App Amparo fica na tela do seu iPhone, como um aplicativo. 🙏', x: 100, y: 200},
+  ];
+  let k = 0;
+  const mostra = () => { if (!document.body.contains(j)) return;
+    const p = P[k], dedo = j.querySelector('#tDedo'), pulso = j.querySelector('#tPulso');
+    j.querySelector('#tTxt').textContent = p.txt; [...j.querySelector('#tBol').children].forEach((b, i) => b.classList.toggle('on', i === k));
+    j.querySelector('#tFolha').style.bottom = k === 1 ? '52px' : '-230px';
+    j.querySelector('#tAdd').style.display = k >= 2 ? 'flex' : 'none';
+    j.querySelector('#tOk').style.background = k === 2 ? '#E8F0FE' : 'none';
+    dedo.style.opacity = k === 3 ? 0 : 1; dedo.style.left = (p.x - 12) + 'px'; dedo.style.top = (p.y + 6) + 'px';
+    pulso.style.display = k === 3 ? 'none' : 'block'; pulso.style.left = (p.x - 22) + 'px'; pulso.style.top = (p.y - 22) + 'px';
+    k = (k + 1) % P.length; setTimeout(mostra, 2800); };
+  mostra();
+  j.querySelector('#tFechar').onclick = () => j.remove();
+}
+
+// abre a cada vez que o app é aberto (uma vez por sessão do navegador)
+function telaEntrada(){
+  const el = $('#entrada');
+  try { if (sessionStorage.getItem('amparo_entrou')) return; } catch(e){}
+  el.hidden = false; document.body.style.overflow = 'hidden';
+  const pararAnim = pontos3D($('#pontos3d'), $('#legEnt'));
+  const sair = () => { try { sessionStorage.setItem('amparo_entrou', '1'); } catch(e){}
+    el.classList.add('saindo'); document.body.style.overflow = '';
+    setTimeout(() => { el.hidden = true; pararAnim(); conviteNotificacoes(); }, 500); };
+  $('#entEntrar').onclick = sair;
+  const b = $('#entBaixar'); b.hidden = jaInstalado();
+  b.onclick = async () => {
+    if (pedidoInstalacao) { pedidoInstalacao.prompt(); const r = await pedidoInstalacao.userChoice; pedidoInstalacao = null; if (r.outcome === 'accepted') { guardar('instalado', true); b.hidden = true; } }
+    else if (ehIphone()) tutorialIphone();
+    else alert('Para instalar:\n\n1. Toque nos três pontinhos ⋮ do navegador (no alto, à direita).\n2. Escolha "Instalar app" ou "Adicionar à tela inicial".\n3. Confirme.');
+  };
+  if (sessao.papel) $('#entPin').placeholder = 'Conectado: ' + NOME_PAPEL[sessao.papel];
+  $('#entForm').onsubmit = async ev => {
+    ev.preventDefault(); const pin = $('#entPin').value.trim(); if (!pin) return;
+    $('#entMsg').style.color = '#C9D6EE'; $('#entMsg').textContent = 'Conferindo…';
+    try { sessao = {pin}; const j = await servidor('entrar'); sessao = {pin, papel: j.papel}; guardar('sessao', sessao); atualizarNav();
+      toast('Bem-vindo(a), ' + NOME_PAPEL[j.papel] + '!'); sair(); rota(); }
+    catch(e){ sessao = ler('sessao', {pin:'', papel:''}); $('#entMsg').style.color = '#FFB4A8'; $('#entMsg').textContent = e.message; }
+  };
+}
+
 atualizarNav();
 rota();
+telaEntrada();
 </script>
 
 <script>
