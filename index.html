@@ -524,6 +524,12 @@ body{padding-bottom:calc(98px + env(safe-area-inset-bottom,0px))}
 .baixar-app,.fab-sugestao{bottom:calc(98px + env(safe-area-inset-bottom,0px))}
 .toast{bottom:calc(104px + env(safe-area-inset-bottom,0px))}
 
+/* textos soltos sobre a imagem de fundo ganham um fundo de vidro para serem lidos (24/11/2026) */
+.tela > h2.titulo-sec,.tela > .lista ~ h2.titulo-sec,#corpoOr > h2.titulo-sec{display:inline-block;background:var(--vidro-forte);-webkit-backdrop-filter:var(--desfoque);backdrop-filter:var(--desfoque);
+  padding:4px 16px;border-radius:16px;box-shadow:var(--sombra)}
+#altar > p,#pecas > p,#anuncios > p,.lista > p,#corpoOr > p,.tela > p.mudo,.tela > p.fonte,.tela > .fonte{background:var(--vidro-forte);-webkit-backdrop-filter:var(--desfoque);backdrop-filter:var(--desfoque);
+  padding:10px 14px;border-radius:14px;box-shadow:var(--sombra);color:var(--tinta)}
+
 /* ===== tela de entrada (abre ao iniciar o app) ===== */
 .entrada{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;align-items:center;overflow-y:auto;
   background:radial-gradient(120% 80% at 50% 35%,#16397A 0%,#0B2F6B 45%,#061A3F 100%);color:#fff;
@@ -1762,7 +1768,7 @@ async function telaTercos(id){
   const d = id && D.find(x => x.id === id);
   if (d) return devocionario(d, 'Terço');
   const dia = DIAS_SEM[hoje().getDay()];
-  app.innerHTML = `<section class="tela"><p class="mudo" style="margin:0 0 12px">Hoje é ${esc(dia)}. Os terços indicados para hoje aparecem com ★.</p>
+  app.innerHTML = `<section class="tela"><p class="cartao" style="margin:0 0 12px;padding:12px 16px">Hoje é ${esc(dia)}. Os terços indicados para hoje aparecem com ★.</p>
     <div class="devs">${D.map(x => { const hojeSim = norm(x.quando || '').includes(norm(dia.split('-')[0]));
       return `<button data-id="${esc(x.id)}" style="--cor:${esc(x.cor || '#0B2F6B')}"><b>${hojeSim ? '★ ' : ''}${esc(x.nome)}</b><span>${esc(x.sub || '')}</span><small>${esc(x.quando || '')}</small></button>`; }).join('')}</div></section>`;
   app.querySelectorAll('.devs button').forEach(b => b.onclick = () => ir('tercos/' + b.dataset.id));
@@ -1779,9 +1785,9 @@ async function telaConfissao(){
   servidorGet('inicio').then(j => { if (j.horarios) { guardar('horarios', j.horarios); const h = horariosHtml(j.horarios, 'Confissão'); if (h && $('#hConf')) $('#hConf').innerHTML = h; } }).catch(() => {});
   let E; try { E = await carregar('exame'); } catch(e){ $('#exame').innerHTML = '<div class="aviso erro">Não consegui abrir o exame de consciência.</div>'; return; }
   const marc = ler('exameMarcas', {});
-  $('#exame').innerHTML = `<h2 class="titulo-sec">${esc(E.titulo || 'Exame de consciência')}</h2>
-    <p>${esc(E.intro || '')}</p>
-    <p class="pequeno mudo">As marcações ficam só neste celular, ninguém mais vê. Use como lembrete na hora da confissão e apague depois.</p>
+  $('#exame').innerHTML = `<article class="cartao" style="margin-top:16px"><h2 class="titulo-sec" style="margin-top:0">${esc(E.titulo || 'Exame de consciência')}</h2>
+    <p style="margin:0 0 10px">${esc(E.intro || '')}</p>
+    <p class="pequeno mudo" style="margin:0">As marcações ficam só neste celular, ninguém mais vê. Use como lembrete na hora da confissão e apague depois.</p></article>
     <div class="tamanho"><button id="menos" aria-label="Diminuir letra">A−</button><button id="mais" aria-label="Aumentar letra">A+</button></div>
     <div id="exTxt" style="font-size:${tamEx}px">
       ${E.oracaoAntes ? `<article class="cartao dev-sec"><h3>Antes de começar</h3><div class="reza">${paragrafos(E.oracaoAntes)}</div></article>` : ''}
