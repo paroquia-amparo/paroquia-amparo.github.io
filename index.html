@@ -688,7 +688,8 @@ body.menu-aberto{overflow:hidden}
   <nav class="lat-itens">
     <button data-ir="inicio"><i>🏠</i>Início</button>
     <button data-ir="dizimo"><i>💛</i>Pagar meu Dízimo</button>
-    <button data-ir="inicio" data-rolar="avisosPascom"><i>📣</i>Avisos e horários</button>
+    <button data-ir="missas"><i>⛪</i>Horários de missa</button>
+    <button data-ir="inicio" data-rolar="avisosPascom"><i>📣</i>Avisos da paróquia</button>
     <button data-ir="velas"><i>🕯️</i>Velas</button>
     <button data-ir="tercos"><i>📿</i>Terços</button>
     <button data-ir="confissao"><i>🕊️</i>Confissão</button>
@@ -784,7 +785,7 @@ async function carregar(nome){
 
 // ---------- rotas ----------
 const rotas = {inicio:telaInicio, dizimo:telaDizimo, devocionarios:telaDevocionarios, oracoes:telaOracoes, oracao:telaOracao, evangelho:telaEvangelho, santo:telaSanto, novenas:telaNovenas, novena:telaNovena, biblia:telaBiblia, pastoral:telaPastoral,
-  velas:telaVelas, tercos:telaTercos, confissao:telaConfissao, bazar:telaBazar, vitrine:telaVitrine};
+  velas:telaVelas, tercos:telaTercos, confissao:telaConfissao, bazar:telaBazar, vitrine:telaVitrine, missas:telaMissas};
 function ir(h){ location.hash = h; }
 function rota(){
   const [nome, ...args] = (location.hash.slice(1) || 'inicio').split('/').map(decodeURIComponent);
@@ -877,6 +878,10 @@ async function telaInicio(){
       <div class="linha"><button class="btn ouro" id="inspSalvar">Publicar inspiração</button><span class="mudo pequeno" id="inspMsg"></span></div>
     </div>` : ''}
     <button class="grande largo dizimo-inicio" data-ir="dizimo"><div class="ic">${ICONE_PIX}</div><div><b>Pagar meu Dízimo</b><span>Pix do dízimo e da obra · cadastro de novo dizimista</span></div></button>
+    <div class="grade" style="margin-top:12px">
+      <button class="grande missas-ini" data-ir="missas"><div class="ic">⛪</div><div><b>Horários de missa</b><span id="proxMissa">Missas, adoração e secretaria</span></div></button>
+      <button class="grande" data-ir="confissao"><div class="ic">🕊️</div><div><b>Confissão</b><span>Horários e exame de consciência</span></div></button>
+    </div>
     <div class="grade">
       <button class="grande largo evang" data-ir="evangelho"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5h7a3 3 0 0 1 3 3v12a2 2 0 0 0-2-2H2z"/><path d="M22 5h-7a3 3 0 0 0-3 3v12a2 2 0 0 1 2-2h8z"/></svg></div>
         <div><b>Evangelho do dia</b><span id="evPrev">${esc(dataLonga(hoje()))}</span></div></button>
@@ -884,7 +889,6 @@ async function telaInicio(){
         <div><b>Santo do dia</b><span id="santoNome">Carregando…</span><span class="pequeno" style="color:var(--azul2);font-weight:700">Conhecer a história ›</span></div></button>
       <button class="grande" data-ir="velas"><div class="ic">🕯️</div><div><b>Acender uma vela</b><span>Deixe sua intenção de oração</span></div></button>
       <button class="grande" data-ir="tercos"><div class="ic">📿</div><div><b>Terços</b><span>Santo Terço, Misericórdia e outros</span></div></button>
-      <button class="grande" data-ir="confissao"><div class="ic">🕊️</div><div><b>Confissão</b><span>Horários e exame de consciência</span></div></button>
       <button class="grande" data-ir="bazar"><div class="ic">🛍️</div><div><b>Bazar da paróquia</b><span>Veja as peças e reserve</span></div></button>
       <button class="grande largo vitrine" data-ir="vitrine"><div class="ic">🏪</div><div><b>Vitrine do Amparo</b><span>Comércios e serviços da nossa comunidade. Precisou? Compre de quem reza com você!</span></div></button>
       <button class="grande" data-ir="oracoes"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M10 5h4"/><path d="M8 21v-6.5a4 4 0 0 1 1.2-2.8L12 9l2.8 2.7a4 4 0 0 1 1.2 2.8V21"/><path d="M6 21h12"/></svg></div><div><b>Orações</b><span>Por tema e por santo</span></div></button>
@@ -908,7 +912,7 @@ async function telaInicio(){
   cartaoNotificacoes();
   conviteNotificacoes();
   desenhaAvisosPascom(ler('avisosPascom', []));
-  desenhaHorarios(ler('horarios', []));
+  desenhaHorarios(ler('horarios', [])); proximaMissa(ler('horarios', []));
   const avPub = $('#avPub');
   if (avPub) avPub.onclick = async () => {
     const titulo = $('#avTit').value.trim(); if (!titulo) return toast('Escreva o título do aviso');
@@ -947,7 +951,7 @@ async function telaInicio(){
     if (!j.ok) return; guardar('inspiracao', j.inspiracao || '');
     if (j.aniversariantes) { guardar('aniversariantes', j.aniversariantes); desenhaAniv(j.aniversariantes); }
     if (j.avisos) { guardar('avisosPascom', j.avisos); desenhaAvisosPascom(j.avisos); }
-    if (j.horarios) { guardar('horarios', j.horarios); desenhaHorarios(j.horarios); }
+    if (j.horarios) { guardar('horarios', j.horarios); desenhaHorarios(j.horarios); proximaMissa(j.horarios); }
     if (location.hash && location.hash !== '#inicio') return;
     const bq = $('#inspTexto'); if (bq && j.inspiracao) { bq.textContent = j.inspiracao; $('#inspAssin').hidden = false; }
   }).catch(()=>{});
@@ -1773,6 +1777,40 @@ async function telaTercos(id){
       return `<button data-id="${esc(x.id)}" style="--cor:${esc(x.cor || '#0B2F6B')}"><b>${hojeSim ? '★ ' : ''}${esc(x.nome)}</b><span>${esc(x.sub || '')}</span><small>${esc(x.quando || '')}</small></button>`; }).join('')}</div></section>`;
   app.querySelectorAll('.devs button').forEach(b => b.onclick = () => ir('tercos/' + b.dataset.id));
 }
+
+// ================= HORÁRIOS DE MISSA (aba fixa) =================
+// Horários vêm do servidor (a Pascom e o Dízimo editam no início). Primeira carga: posts fixados do Instagram @pnsamparo.oficial (24/11/2026).
+const NOMES_DIA = ['domingo','segunda','terca','quarta','quinta','sexta','sabado'];
+function ehHojeDia(txt){ const t = norm(txt), d = hoje().getDay();
+  if (t.includes(NOMES_DIA[d])) return true;
+  const m = t.match(/(segunda|terca|quarta|quinta|sexta|sabado|domingo)\s+a\s+(segunda|terca|quarta|quinta|sexta|sabado|domingo)/);
+  if (m) { const a = NOMES_DIA.indexOf(m[1]), b = NOMES_DIA.indexOf(m[2]); return a <= b ? d >= a && d <= b : d >= a || d <= b; }
+  return false; }
+const ENDERECOS = [
+  {nome: 'Igreja Matriz Nossa Senhora do Amparo', end: 'Rua Tuiuti, Lt 7 e 8, 293 – Antonina, São Gonçalo'},
+  {nome: 'Capela Nossa Senhora de Fátima', end: 'Rua Oscarino Maciel, 230A – Cruzeiro do Sul, São Gonçalo'},
+];
+function telaMissas(){
+  topo('Paróquia', 'Horários de missa');
+  const desenha = lista => {
+    const grupo = (tipo, emo) => { const l = lista.filter(h => h.tipo === tipo); if (!l.length) return '';
+      return `<article class="cartao" style="margin-top:14px"><h2 class="form-tit" style="margin-bottom:6px">${emo} ${esc(tipo === 'Missa' ? 'Santas Missas' : tipo)}</h2>
+        ${l.map(h => { const hj = ehHojeDia(h.dia); return `<div class="hlinha" style="${hj ? 'background:#FFF6DC;border-radius:10px;padding:8px 10px;border-bottom-color:transparent' : ''}"><span>${esc(h.dia)}${hj ? ' <b style="color:var(--ouro)">· hoje</b>' : ''}${h.obs ? `<br><span class="mudo pequeno">${esc(h.obs)}</span>` : ''}</span><b style="font-size:19px">${esc(h.hora)}</b></div>`; }).join('')}</article>`; };
+    app.innerHTML = `<section class="tela">
+      ${lista.length ? grupo('Missa', '⛪') + grupo('Adoração', '✨') + grupo('Confissão', '🕊️') + grupo('Secretaria', '🏛️') : '<div class="cartao">Os horários ainda não foram cadastrados. Procure a secretaria da paróquia.</div>'}
+      <button class="grande largo" data-ir="confissao" style="margin-top:14px;width:100%"><div class="ic">🕊️</div><div><b>Vai se confessar?</b><span>Faça antes o exame de consciência</span></div></button>
+      <article class="cartao" style="margin-top:14px"><h2 class="form-tit" style="margin-bottom:6px">📍 Onde fica</h2>
+        ${ENDERECOS.map(e => `<div class="hlinha"><span><b style="color:var(--azul)">${esc(e.nome)}</b><br><span class="pequeno">${esc(e.end)}</span></span><a class="btn claro" style="padding:8px 12px;font-size:14px;text-decoration:none;align-self:center" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(e.end)}" target="_blank" rel="noopener">Mapa</a></div>`).join('')}</article>
+      <p class="fonte">Horários conforme o Instagram da paróquia (@pnsamparo.oficial). Em dias de festa podem mudar: veja os avisos no início do app.</p></section>`;
+    app.querySelectorAll('[data-ir]').forEach(b => b.onclick = () => ir(b.dataset.ir));
+  };
+  desenha(ler('horarios', []));
+  servidorGet('inicio').then(j => { if (j.horarios) { guardar('horarios', j.horarios); if (location.hash === '#missas') desenha(j.horarios); } }).catch(() => {});
+}
+// no quadrado do início: a missa de hoje, se houver
+function proximaMissa(lista){ const el = $('#proxMissa'); if (!el) return;
+  const h = (lista || []).filter(x => x.tipo === 'Missa' && ehHojeDia(x.dia)).map(x => x.hora);
+  el.textContent = h.length ? 'Hoje: ' + h.join(' · ') : 'Missas, adoração e secretaria'; }
 
 // ================= CONFISSÃO E EXAME DE CONSCIÊNCIA =================
 let tamEx = ler('tamEx', 18);
