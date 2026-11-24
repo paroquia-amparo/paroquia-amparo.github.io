@@ -531,6 +531,28 @@ body{padding-bottom:calc(98px + env(safe-area-inset-bottom,0px))}
 #altar > p,#pecas > p,#anuncios > p,.lista > p,#corpoOr > p,.tela > p.mudo,.tela > p.fonte,.tela > .fonte{background:var(--vidro-forte);-webkit-backdrop-filter:var(--desfoque);backdrop-filter:var(--desfoque);
   padding:10px 14px;border-radius:14px;box-shadow:var(--sombra);color:var(--tinta)}
 
+/* aviso pop-up ao abrir o app */
+.popup-caixa{max-width:440px!important;padding:0!important;overflow:hidden}
+.popup-fixo{text-align:center;padding:0 0 18px}
+.popup-fixo img{width:100%;max-height:52vh;object-fit:contain;display:block;background:#fff}
+.popup-fixo .rot{font-size:12.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--ouro);margin:16px 18px 4px}
+.popup-fixo h2{font-family:var(--disp);font-size:30px;color:var(--azul);margin:0 18px 6px;line-height:1.1}
+.popup-fixo p{font-size:17.5px;line-height:1.5;margin:0 18px 14px;white-space:pre-line}
+.popup-fixo .btn{width:calc(100% - 36px)}
+
+/* próximos eventos (quadro compacto no início) e tela do evento (24/11/2026) */
+.eventos-box{background:var(--vidro-forte);-webkit-backdrop-filter:var(--desfoque);backdrop-filter:var(--desfoque);border:1px solid var(--vidro-borda);
+  border-radius:24px;box-shadow:var(--sombra);padding:14px 14px 10px;margin-bottom:16px;display:grid;gap:4px}
+.eventos-box > .rot{font-size:13px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--ouro);margin:0 4px 4px}
+.ev-linha{border:0;background:rgba(255,255,255,.7);border-radius:16px;padding:10px 12px;display:flex;align-items:center;gap:12px;text-align:left;width:100%}
+.ev-ic{font-size:26px;flex:none}
+.ev-txt{flex:1;min-width:0;display:grid}
+.ev-txt b{font-family:var(--disp);font-size:21px;color:var(--azul);line-height:1.15}
+.ev-txt small{font-size:14px;font-weight:700;color:var(--ouro)}
+.ev-mais{flex:none;font-weight:800;font-size:14px;color:var(--azul2);white-space:nowrap}
+.ev-foto{margin:14px 0 0;border-radius:20px;overflow:hidden;box-shadow:var(--sombra);background:#fff}
+.ev-foto img{width:100%;height:auto;display:block;cursor:zoom-in}
+
 /* área da equipe: cada seção vira um cartão de vidro, para nada ficar solto sobre a imagem (24/11/2026) */
 .secao-equipe{background:var(--vidro-forte);-webkit-backdrop-filter:var(--desfoque);backdrop-filter:var(--desfoque);
   border:1px solid var(--vidro-borda);border-radius:24px;box-shadow:var(--sombra);padding:16px;color:var(--tinta)}
@@ -697,7 +719,7 @@ body.menu-aberto{overflow:hidden}
     <button data-ir="inicio"><i>🏠</i>Início</button>
     <button data-ir="dizimo"><i>💛</i>Pagar meu Dízimo</button>
     <button data-ir="missas"><i>⛪</i>Horários de missa</button>
-    <button data-ir="inicio" data-rolar="avisosPascom"><i>📣</i>Avisos da paróquia</button>
+    <button data-ir="eventos"><i>📅</i>Eventos e avisos</button>
     <button data-ir="velas"><i>🕯️</i>Velas</button>
     <button data-ir="tercos"><i>📿</i>Terços</button>
     <button data-ir="confissao"><i>🕊️</i>Confissão</button>
@@ -793,7 +815,7 @@ async function carregar(nome){
 
 // ---------- rotas ----------
 const rotas = {inicio:telaInicio, dizimo:telaDizimo, devocionarios:telaDevocionarios, oracoes:telaOracoes, oracao:telaOracao, evangelho:telaEvangelho, santo:telaSanto, novenas:telaNovenas, novena:telaNovena, biblia:telaBiblia, pastoral:telaPastoral,
-  velas:telaVelas, tercos:telaTercos, confissao:telaConfissao, bazar:telaBazar, vitrine:telaVitrine, missas:telaMissas};
+  velas:telaVelas, tercos:telaTercos, confissao:telaConfissao, bazar:telaBazar, vitrine:telaVitrine, missas:telaMissas, evento:telaEvento, eventos:telaEventos};
 function ir(h){ location.hash = h; }
 function rota(){
   const [nome, ...args] = (location.hash.slice(1) || 'inicio').split('/').map(decodeURIComponent);
@@ -867,11 +889,15 @@ async function telaInicio(){
     <div id="avisosPascom"></div>
     ${avisosDaSemana()}
     ${podePascom ? `<div class="cartao editor" style="margin:0 0 16px" id="edAviso">
-      <b style="font-family:var(--disp);font-size:24px;color:var(--azul)">📣 Publicar aviso da paróquia</b>
-      <div class="linha"><select class="campo" id="avCat" style="max-width:200px"><option value="aviso">🔔 Aviso</option><option value="missa">⛪ Missa</option><option value="confissao">🕊️ Confissão</option><option value="evento">🎉 Evento</option><option value="pastoral">🤝 Pastoral</option></select>
-        <label class="pequeno mudo" style="display:flex;gap:6px;align-items:center">Mostrar até <input class="campo" id="avAte" type="date" style="width:auto;padding:8px"></label></div>
-      <input class="campo" id="avTit" maxlength="90" placeholder="Título (ex.: Missa de Natal às 20h)">
-      <textarea class="campo" id="avTxt" maxlength="900" placeholder="Texto do aviso"></textarea>
+      <b style="font-family:var(--disp);font-size:24px;color:var(--azul)">📣 Publicar evento ou aviso</b>
+      <div class="linha"><select class="campo" id="avCat" style="max-width:200px"><option value="evento">🎉 Evento</option><option value="aviso">🔔 Aviso</option><option value="missa">⛪ Missa</option><option value="confissao">🕊️ Confissão</option><option value="pastoral">🤝 Pastoral</option><option value="campanha">💛 Campanha</option></select></div>
+      <input class="campo" id="avTit" maxlength="90" placeholder="Nome do evento (ex.: Missa de Natal)">
+      <div class="linha"><label class="pequeno mudo" style="display:flex;gap:6px;align-items:center">Data <input class="campo" id="avQuando" type="date" style="width:auto;padding:8px"></label>
+        <label class="pequeno mudo" style="display:flex;gap:6px;align-items:center">Hora <input class="campo" id="avHora" type="time" style="width:auto;padding:8px"></label></div>
+      <textarea class="campo" id="avTxt" maxlength="1500" placeholder="Texto (aparece quando a pessoa toca em Saiba mais)"></textarea>
+      <label class="pequeno" style="display:grid;gap:6px;font-weight:700">📷 Fotos: flyer, campanha, evento (até 6)<input class="campo" id="avFotos" type="file" accept="image/*" multiple></label>
+      <div class="miniaturas" id="avMini"></div>
+      <label class="pequeno mudo" style="display:flex;gap:6px;align-items:center">Mostrar no app até <input class="campo" id="avAte" type="date" style="width:auto;padding:8px"> <span>(se vazio: até o dia do evento)</span></label>
       <label class="aceite"><input type="checkbox" id="avNotif" checked> Avisar também no celular de quem ativou as notificações</label>
       <div class="linha"><button class="btn ouro" id="avPub">Publicar aviso</button><span class="mudo pequeno" id="avMsg"></span></div>
     </div>` : ''}
@@ -922,12 +948,18 @@ async function telaInicio(){
   desenhaAvisosPascom(ler('avisosPascom', []));
   desenhaHorarios(ler('horarios', [])); proximaMissa(ler('horarios', []));
   const avPub = $('#avPub');
+  let fotosAviso = [];
+  if ($('#avFotos')) $('#avFotos').onchange = async () => { fotosAviso = []; $('#avMini').textContent = 'Preparando as fotos…';
+    try { for (const a of [...$('#avFotos').files].slice(0, 6)) fotosAviso.push(await reduzirFoto(a, 1400)); } catch(e){ toast(e.message); }
+    $('#avMini').innerHTML = fotosAviso.map(b => `<img src="data:image/jpeg;base64,${b}" alt="">`).join(''); };
   if (avPub) avPub.onclick = async () => {
-    const titulo = $('#avTit').value.trim(); if (!titulo) return toast('Escreva o título do aviso');
-    avPub.disabled = true; $('#avMsg').textContent = 'Publicando…';
+    const titulo = $('#avTit').value.trim(); if (!titulo) return toast('Escreva o nome do evento ou do aviso');
+    avPub.disabled = true; $('#avMsg').textContent = fotosAviso.length ? 'Enviando as fotos…' : 'Publicando…';
     try {
-      const j = await servidor('aviso', {titulo, texto: $('#avTxt').value.trim(), categoria: $('#avCat').value, ate: $('#avAte').value, notificar: $('#avNotif').checked, autor: NOME_PAPEL[sessao.papel]});
-      guardar('avisosPascom', j.avisos); desenhaAvisosPascom(j.avisos); $('#avTit').value = ''; $('#avTxt').value = ''; $('#avMsg').textContent = 'Publicado!';
+      const j = await servidor('aviso', {titulo, texto: $('#avTxt').value.trim(), categoria: $('#avCat').value, ate: $('#avAte').value, quando: $('#avQuando').value, hora: $('#avHora').value,
+        fotos: fotosAviso, notificar: $('#avNotif').checked, autor: NOME_PAPEL[sessao.papel]});
+      guardar('avisosPascom', j.avisos); desenhaAvisosPascom(j.avisos);
+      ['#avTit','#avTxt','#avQuando','#avHora','#avAte','#avFotos'].forEach(s => $(s).value = ''); fotosAviso = []; $('#avMini').innerHTML = ''; $('#avMsg').textContent = 'Publicado!';
       toast($('#avNotif').checked ? 'Aviso publicado. Ele chega no celular dos fiéis em até 1 hora.' : 'Aviso publicado');
     } catch(e){ $('#avMsg').textContent = e.message; }
     avPub.disabled = false;
@@ -959,6 +991,7 @@ async function telaInicio(){
     if (!j.ok) return; guardar('inspiracao', j.inspiracao || '');
     if (j.aniversariantes) { guardar('aniversariantes', j.aniversariantes); desenhaAniv(j.aniversariantes); }
     if (j.avisos) { guardar('avisosPascom', j.avisos); desenhaAvisosPascom(j.avisos); }
+    if (j.popups) { guardar('popups', j.popups); mostrarPopups(); }
     if (j.horarios) { guardar('horarios', j.horarios); desenhaHorarios(j.horarios); proximaMissa(j.horarios); }
     if (location.hash && location.hash !== '#inicio') return;
     const bq = $('#inspTexto'); if (bq && j.inspiracao) { bq.textContent = j.inspiracao; $('#inspAssin').hidden = false; }
@@ -970,19 +1003,67 @@ async function telaInicio(){
 }
 
 // avisos publicados pela Pascom: aparecem primeiro no início
-const ICONE_AVISO = {aviso:'🔔', missa:'⛪', confissao:'🕊️', evento:'🎉', pastoral:'🤝'};
+const ICONE_AVISO = {aviso:'🔔', missa:'⛪', confissao:'🕊️', evento:'🎉', pastoral:'🤝', campanha:'💛'};
+const DIAS_CURTO = ['dom','seg','ter','qua','qui','sex','sáb'];
+// "sáb, 14/12 · 19h" (ou a data de publicação, se o aviso não tiver data)
+function dataEvento(a){
+  if (a.quando) { const d = new Date(a.quando + 'T12:00:00'), hj = hoje(), am = somaDias(hj, 1);
+    const qual = d.toDateString() === hj.toDateString() ? 'Hoje' : d.toDateString() === am.toDateString() ? 'Amanhã' : `${DIAS_CURTO[d.getDay()]}, ${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}`;
+    return qual + (a.hora ? ' · ' + a.hora.replace(':00', 'h').replace(':', 'h') : ''); }
+  return a.data ? 'Publicado em ' + new Date(a.data).toLocaleDateString('pt-BR') : '';
+}
+// no início: só um quadro compacto com o nome, a data e "Saiba mais" (as fotos e o texto ficam na tela do evento)
 function desenhaAvisosPascom(lista){
   const el = $('#avisosPascom'); if (!el) return;
   lista = lista || [];
   if (!lista.length) { el.innerHTML = ''; return; }
-  const pode = ['pascom','padre','dizimo','master'].includes(sessao.papel);
-  el.innerHTML = `<div class="avisos-pascom"><div class="rot">🔔 Avisos da paróquia</div>${lista.map(a => `<div class="ap ${esc(a.categoria)}"><div class="aviso-ic">${ICONE_AVISO[a.categoria] || '🔔'}</div><div style="flex:1;min-width:0">
-      <b>${esc(a.titulo)}</b>${a.texto ? `<p>${esc(a.texto)}</p>` : ''}<small>${a.data ? 'Publicado em ' + new Date(a.data).toLocaleDateString('pt-BR') : ''}${a.ate ? ' · até ' + a.ate.split('-').reverse().slice(0,2).join('/') : ''}</small>
-      ${pode ? `<div class="acoes"><button data-apagar="${esc(a.id)}">Tirar do app</button></div>` : ''}</div></div>`).join('')}</div>`;
-  el.querySelectorAll('[data-apagar]').forEach(b => b.onclick = async () => {
-    if (!confirm('Tirar este aviso do app?')) return;
-    try { const j = await servidor('apagarAviso', {id: b.dataset.apagar}); guardar('avisosPascom', j.avisos); desenhaAvisosPascom(j.avisos); } catch(e){ toast(e.message); }
-  });
+  const mostra = lista.slice(0, 4);
+  el.innerHTML = `<div class="eventos-box"><div class="rot">📅 Veja os próximos eventos</div>
+    ${mostra.map(a => `<button class="ev-linha" data-ev="${esc(a.id)}"><span class="ev-ic">${ICONE_AVISO[a.categoria] || '🔔'}</span>
+      <span class="ev-txt"><b>${esc(a.titulo)}</b><small>${esc(dataEvento(a))}${a.fotos && a.fotos.length ? ' · 📷' : ''}</small></span><span class="ev-mais">Saiba mais ›</span></button>`).join('')}
+    ${lista.length > mostra.length ? `<button class="link" data-todos="1" style="margin-top:6px">Ver todos os ${lista.length} eventos e avisos ›</button>` : ''}</div>`;
+  el.querySelectorAll('[data-ev]').forEach(b => b.onclick = () => ir('evento/' + b.dataset.ev));
+  const t = el.querySelector('[data-todos]'); if (t) t.onclick = () => ir('eventos');
+}
+
+// tela de um evento: texto completo e as fotos (flyer, campanha, fotos do evento)
+async function telaEvento(id){
+  topo('Paróquia', 'Evento');
+  const desenha = lista => {
+    const a = (lista || []).find(x => x.id === id);
+    if (!a) { app.innerHTML = '<section class="tela"><div class="cartao">Este evento já passou ou foi retirado do app.</div><p style="text-align:center"><button class="btn" onclick="location.hash=\'eventos\'">Ver os próximos eventos</button></p></section>'; return; }
+    topo(ICONE_AVISO[a.categoria] ? 'Eventos e avisos' : 'Paróquia', a.titulo);
+    const pode = ['pascom','padre','dizimo','master'].includes(sessao.papel);
+    app.innerHTML = `<section class="tela"><article class="cartao">
+      <div class="rot-sec">${ICONE_AVISO[a.categoria] || '🔔'} ${esc(a.categoria === 'campanha' ? 'Campanha' : a.categoria === 'evento' ? 'Evento' : 'Aviso da paróquia')}</div>
+      <h2 class="form-tit" style="margin:6px 0 4px">${esc(a.titulo)}</h2>
+      ${a.quando || a.hora ? `<p style="margin:0 0 10px;font-weight:800;color:var(--ouro);font-size:18px">📅 ${esc(dataEvento(a))}</p>` : ''}
+      ${a.texto ? `<div style="font-size:18px;line-height:1.55;white-space:pre-line">${esc(a.texto)}</div>` : ''}</article>
+      ${(a.fotos || []).map((f, i) => `<figure class="ev-foto"><img src="${esc(f)}" alt="Foto ${i + 1} de ${esc(a.titulo)}" loading="lazy" data-f="${esc(f)}"></figure>`).join('')}
+      <div class="passa"><button class="btn claro" id="evTodos">Todos os eventos</button><button class="btn" id="evComp">Compartilhar</button></div>
+      ${pode ? `<p style="text-align:center"><button class="btn claro" id="evTirar" style="color:var(--erro)">Tirar do app</button></p>` : ''}</section>`;
+    app.querySelectorAll('[data-f]').forEach(im => im.onclick = () => window.open(im.dataset.f, '_blank', 'noopener'));
+    $('#evTodos').onclick = () => ir('eventos');
+    $('#evComp').onclick = async () => { const t = `${a.titulo}${a.quando ? '\n📅 ' + dataEvento(a) : ''}\n\n${a.texto || ''}\n\nVeja no App Amparo: ${LINK_APP}#evento/${a.id}`;
+      try { if (navigator.share) await navigator.share({title: a.titulo, text: t}); else { await navigator.clipboard.writeText(t); toast('Texto copiado'); } } catch(e){} };
+    const tirar = $('#evTirar'); if (tirar) tirar.onclick = async () => { if (!confirm('Tirar este evento do app?')) return;
+      try { const j = await servidor('apagarAviso', {id}); guardar('avisosPascom', j.avisos); toast('Retirado do app'); ir('eventos'); } catch(e){ toast(e.message); } };
+  };
+  desenha(ler('avisosPascom', []));
+  servidorGet('inicio').then(j => { if (j.avisos) { guardar('avisosPascom', j.avisos); if (location.hash === '#evento/' + id) desenha(j.avisos); } }).catch(() => {});
+}
+
+// todos os eventos e avisos
+function telaEventos(){
+  topo('Paróquia', 'Eventos e avisos');
+  const desenha = lista => {
+    app.innerHTML = `<section class="tela"><div class="eventos-box" style="margin:0">${(lista || []).length ? lista.map(a => `<button class="ev-linha" data-ev="${esc(a.id)}"><span class="ev-ic">${ICONE_AVISO[a.categoria] || '🔔'}</span>
+      <span class="ev-txt"><b>${esc(a.titulo)}</b><small>${esc(dataEvento(a))}${a.fotos && a.fotos.length ? ' · 📷' : ''}</small></span><span class="ev-mais">Saiba mais ›</span></button>`).join('')
+      : '<p class="mudo" style="margin:0">Nenhum evento agendado agora. Volte em breve!</p>'}</div></section>`;
+    app.querySelectorAll('[data-ev]').forEach(b => b.onclick = () => ir('evento/' + b.dataset.ev));
+  };
+  desenha(ler('avisosPascom', []));
+  servidorGet('inicio').then(j => { if (j.avisos) { guardar('avisosPascom', j.avisos); if (location.hash === '#eventos') desenha(j.avisos); } }).catch(() => {});
 }
 
 // horários fixos da paróquia (a Pascom edita)
@@ -1852,9 +1933,9 @@ async function telaConfissao(){
 
 // ================= BAZAR =================
 // fotos reduzidas no próprio celular antes de subir (até 1000 px, JPEG)
-function reduzirFoto(arq){
+function reduzirFoto(arq, max = 1000){
   return new Promise((ok, erro) => { const img = new Image(), url = URL.createObjectURL(arq);
-    img.onload = () => { const max = 1000, k = Math.min(1, max / Math.max(img.width, img.height)); const c = document.createElement('canvas');
+    img.onload = () => { const k = Math.min(1, max / Math.max(img.width, img.height)); const c = document.createElement('canvas');
       c.width = Math.round(img.width * k); c.height = Math.round(img.height * k); c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
       URL.revokeObjectURL(url); ok(c.toDataURL('image/jpeg', .82).split(',')[1]); };
     img.onerror = () => { URL.revokeObjectURL(url); erro(new Error('Não consegui ler a foto')); }; img.src = url; });
@@ -1963,6 +2044,68 @@ async function telaVitrine(){
   };
 }
 
+// ================= AVISOS POP-UP (aparecem ao abrir o app, no período escolhido pelo Dízimo) =================
+// data de hoje no horário do celular (não em UTC, que vira o dia às 21h no Brasil)
+function isoHoje(){ const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+// Cada aviso aparece uma vez a cada vez que o app é aberto; se houver mais de um, aparecem em sequência.
+function mostrarPopups(){
+  if (!$('#entrada').hidden || $('.arte-fundo')) return false;
+  let vistos = []; try { vistos = JSON.parse(sessionStorage.getItem('amparo_popupsVistos') || '[]'); } catch(e){}
+  const hj = isoHoje();
+  const p = (ler('popups', []) || []).find(x => !vistos.includes(x.id) && (!x.inicio || x.inicio <= hj) && (!x.fim || x.fim >= hj));
+  if (!p) return false;
+  try { sessionStorage.setItem('amparo_popupsVistos', JSON.stringify(vistos.concat(p.id))); } catch(e){}
+  const j = janela(`<div class="popup-fixo">${p.foto ? `<img src="${esc(p.foto)}" alt="">` : ''}
+    <div class="rot">📌 Aviso da paróquia</div><h2>${esc(p.titulo)}</h2>${p.texto ? `<p>${esc(p.texto)}</p>` : ''}
+    <button class="btn ouro grande-btn" id="popOk">Amém, entendi</button></div>`, 'popup-caixa');
+  j.onclick = null; // só fecha pelo botão
+  $('#popOk').onclick = () => { j.remove(); if (!mostrarPopups()) conviteNotificacoes(); };
+  return true;
+}
+const dataBR = d => d ? d.split('-').reverse().join('/') : '';
+function situacaoPopup(p){ const hj = isoHoje();
+  if (!p.rodando) return ['Pausado', 'erro']; if (p.fim && p.fim < hj) return ['Encerrado', '']; if (p.inicio && p.inicio > hj) return ['Programado', 'aguarda']; return ['No ar', 'pronto']; }
+function painelPopups(el){
+  if (!el) return;
+  const hj = isoHoje();
+  let foto = '';
+  el.innerHTML = `<h2>📌 Avisos pop-up</h2>
+    <p class="mudo" style="margin:-4px 0 10px">Aparecem na tela de todos ao abrir o app, no período que vocês escolherem.</p>
+    <form class="form" id="fpop">
+      <label>Título<input class="campo" id="popTit" maxlength="90" required placeholder="Ex.: Festa da Padroeira"></label>
+      <label>Mensagem<textarea class="campo" id="popTxt" maxlength="1500" rows="3" placeholder="O que vocês querem avisar"></textarea></label>
+      <label>Imagem <span class="mudo pequeno">(opcional)</span><input class="campo" id="popFoto" type="file" accept="image/*"></label><div class="miniaturas" id="popMini"></div>
+      <label>Aparece a partir de<input class="campo" id="popIni" type="date" required value="${hj}" style="min-width:0"></label>
+      <label>Aparece até<input class="campo" id="popFim" type="date" required style="min-width:0"></label>
+      <button class="btn ouro grande-btn">Colocar no ar</button></form>
+    <h3 style="margin:18px 0 8px;font-size:15px;color:var(--mudo);text-transform:uppercase;letter-spacing:.08em">Avisos cadastrados</h3>
+    <div id="popLista" class="mudo">Carregando…</div>`;
+  const desenha = lista => {
+    $('#popLista').innerHTML = lista.length ? lista.map(p => { const [st, cls] = situacaoPopup(p);
+      return `<div class="item-equipe"><div style="display:flex;justify-content:space-between;gap:8px;align-items:flex-start"><b>${esc(p.titulo)}</b><span class="status ${cls}">${st}</span></div>
+        <span class="pequeno mudo">De ${esc(dataBR(p.inicio))} até ${esc(dataBR(p.fim))}${p.autor ? ' · por ' + esc(p.autor) : ''}</span>
+        <div class="acoes">${p.rodando ? `<button class="btn claro" data-a="pausar" data-id="${esc(p.id)}">⏸ Pausar</button>` : `<button class="btn" data-a="rodar" data-id="${esc(p.id)}">▶ Rodar</button>`}
+          <button class="btn claro" data-a="apagar" data-id="${esc(p.id)}" style="color:var(--erro)">🗑 Apagar</button></div></div>`; }).join('')
+      : '<p class="mudo" style="margin:0">Nenhum aviso pop-up ainda.</p>';
+    $('#popLista').querySelectorAll('[data-a]').forEach(b => b.onclick = async () => {
+      if (b.dataset.a === 'apagar' && !confirm('Apagar este aviso pop-up?')) return;
+      b.disabled = true;
+      try { const j = await servidor('statusPopup', {id: b.dataset.id, acao2: b.dataset.a}); desenha(j.popups); } catch(e){ toast(e.message); b.disabled = false; }
+    });
+  };
+  servidor('popupsEquipe').then(j => desenha(j.popups)).catch(e => { $('#popLista').textContent = e.message; });
+  $('#popFoto').onchange = async () => { foto = ''; $('#popMini').innerHTML = '';
+    const a = $('#popFoto').files[0]; if (!a) return;
+    try { foto = await reduzirFoto(a, 1200); $('#popMini').innerHTML = `<img src="data:image/jpeg;base64,${foto}" alt="">`; } catch(e){ toast(e.message); } };
+  $('#fpop').onsubmit = async ev => {
+    ev.preventDefault(); const b = ev.submitter; b.disabled = true;
+    try { const j = await servidor('popup', {titulo: $('#popTit').value, texto: $('#popTxt').value, inicio: $('#popIni').value, fim: $('#popFim').value, foto, autor: NOME_PAPEL[sessao.papel]});
+      desenha(j.popups); $('#fpop').reset(); $('#popIni').value = hj; foto = ''; $('#popMini').innerHTML = ''; toast('Aviso pop-up no ar!'); }
+    catch(e){ toast(e.message); }
+    b.disabled = false;
+  };
+}
+
 // ================= TROCAR PIN (cada acesso troca o seu; o Master troca qualquer um) =================
 function campoTrocarPin(el){
   const master = sessao.papel === 'master';
@@ -2061,7 +2204,9 @@ async function telaPastoral(){
       <div id="pedidos" class="mudo">Carregando…</div>
     </div>
     <button class="grande largo" style="margin-top:22px;width:100%" onclick="location.hash='bazar'"><div class="ic">🛍️</div><div><b>Bazar: cadastrar peças e ver reservas</b><span>Fotos, preços e quem reservou</span></div></button>
+    <div class="secao-equipe" id="popupsEq" style="margin-top:22px"></div>
     <div id="equipe"></div></section>`;
+  painelPopups($('#popupsEq'));
   secoesEquipe($('#equipe'));
 
   const desenhaNotas = recados => {
@@ -2221,7 +2366,7 @@ function telaEntrada(){
   const pararAnim = pontos3D($('#pontos3d'), $('#legEnt'));
   const sair = () => { try { sessionStorage.setItem('amparo_entrou', '1'); } catch(e){}
     el.classList.add('saindo'); document.body.style.overflow = '';
-    setTimeout(() => { el.hidden = true; pararAnim(); conviteNotificacoes(); }, 500); };
+    setTimeout(() => { el.hidden = true; pararAnim(); if (!mostrarPopups()) conviteNotificacoes(); }, 500); };
   $('#entEntrar').onclick = sair;
   const b = $('#entBaixar'); b.hidden = jaInstalado();
   b.onclick = async () => {
