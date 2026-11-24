@@ -1,5 +1,5 @@
-const C='amparo-202611241146';
-const A=["./", "index.html", "manifest.webmanifest", "icons/icon-192.png", "dados/santos.json", "dados/novenas.json", "dados/biblia.json", "dados/oracoes.json", "dados/devocionarios.json", "dados/comentarios.json", "dados/tercos.json", "dados/exame.json", "img/fundo.jpg", "img/aparecida.png", "img/amparo.png"];
+const C='amparo-202611241211';
+const A=["./", "index.html", "manifest.webmanifest", "icons/icon-192.png", "dados/santos.json", "dados/novenas.json", "dados/biblia.json", "dados/oracoes.json", "dados/devocionarios.json", "dados/comentarios.json", "dados/tercos.json", "dados/exame.json", "img/fundo.jpg", "img/aparecida.png", "img/igreja.png", "img/amparo.png"];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(A)));self.skipWaiting()});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==C).map(x=>caches.delete(x)))));self.clients.claim()});
 self.addEventListener('fetch',e=>{const u=new URL(e.request.url);if(e.request.method!=='GET'||u.origin!==location.origin)return;

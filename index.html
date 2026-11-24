@@ -2262,11 +2262,21 @@ async function telaPastoral(){
 function pontos3D(cv, legenda){
   const N = 3200, TAU = Math.PI * 2, ctx = cv.getContext('2d');
   const esfera = () => { const o = [], g = Math.PI * (3 - Math.sqrt(5)); for (let i = 0; i < N; i++) { const y = 1 - (i / (N - 1)) * 2, r = Math.sqrt(1 - y * y), t = g * i; o.push([Math.cos(t) * r * .85, y * .85, Math.sin(t) * r * .85]); } return o; };
+  // globo terrestre (24/11/2026): meridianos e paralelos, como um globo desenhado, com uma esfera leve por dentro
+  const globo = () => { const o = [], R = .82, nLinhas = Math.round(N * .88), mer = 10, par = [-60, -30, 0, 30, 60];
+    for (let i = 0; i < nLinhas; i++) {
+      if (i % 2) { const lon = (i % (mer * 2)) / 2 * (TAU / mer), lat = ((i * 0.618) % 1) * Math.PI - Math.PI / 2; // meridiano
+        o.push([Math.cos(lat) * Math.cos(lon) * R, Math.sin(lat) * R, Math.cos(lat) * Math.sin(lon) * R]); }
+      else { const lat = par[(i / 2) % par.length] * Math.PI / 180, lon = ((i * 0.381) % 1) * TAU; // paralelo
+        o.push([Math.cos(lat) * Math.cos(lon) * R, Math.sin(lat) * R, Math.cos(lat) * Math.sin(lon) * R]); } }
+    const g = Math.PI * (3 - Math.sqrt(5)), resto = N - nLinhas;
+    for (let i = 0; i < resto; i++) { const y = 1 - (i / (resto - 1)) * 2, r = Math.sqrt(1 - y * y), t = g * i; o.push([Math.cos(t) * r * R * .96, y * R * .96, Math.sin(t) * r * R * .96]); }
+    return o; };
   const anel = () => { const o = [], a = Math.ceil(Math.sqrt(N * 3)), b = Math.ceil(N / a); for (let i = 0; i < a; i++) for (let j = 0; j < b && o.length < N; j++) { const u = i / a * TAU, v = j / b * TAU, R = .68, r = .26; o.push([(R + r * Math.cos(v)) * Math.cos(u), r * Math.sin(v), (R + r * Math.cos(v)) * Math.sin(u)]); } while (o.length < N) o.push(o[o.length % a]); return o; };
   const cubo = () => { const o = [], k = Math.ceil(Math.sqrt(N / 6)) + 1, f = []; for (let i = 0; i < k; i++) for (let j = 0; j < k; j++) { const a = -1 + 2 * i / (k - 1), b = -1 + 2 * j / (k - 1); f.push([a, b, 1], [a, b, -1], [a, 1, b], [a, -1, b], [1, a, b], [-1, a, b]); } for (let i = 0; i < N; i++) { const p = f[Math.floor(i * f.length / N)]; o.push([p[0] * .6, p[1] * .6, p[2] * .6]); } return o; };
   const estrela = () => { const o = []; for (let i = 0; i < N; i++) { const k = i % 10, a1 = k * Math.PI / 5 - Math.PI / 2, a2 = (k + 1) * Math.PI / 5 - Math.PI / 2, r1 = k % 2 ? .38 : .9, r2 = k % 2 ? .9 : .38, t = (i * 0.618) % 1, q = Math.sqrt(((i * 0.381) % 1)); const x = (Math.cos(a1) * r1 * (1 - t) + Math.cos(a2) * r2 * t) * q, y = (Math.sin(a1) * r1 * (1 - t) + Math.sin(a2) * r2 * t) * q; o.push([x, y, ((i % 5) / 4 - .5) * .3]); } return o; };
   // figura: pontos sorteados nos pixels escuros da silhueta, em duas camadas (frente e trás), como o "S" do GDC
-  const daImagem = src => new Promise(ok => { const im = new Image(); im.onload = () => {
+  const daImagem = (src, zoom = 1) => new Promise(ok => { const im = new Image(); im.onload = () => {
       const T = 300, c = document.createElement('canvas'); c.width = c.height = T; const g = c.getContext('2d', {willReadFrequently: true});
       const k = Math.min(T / im.width, T / im.height); g.fillStyle = '#fff'; g.fillRect(0, 0, T, T); g.drawImage(im, (T - im.width * k) / 2, (T - im.height * k) / 2, im.width * k, im.height * k);
       const d = g.getImageData(0, 0, T, T).data, escuro = (x, y) => x >= 0 && y >= 0 && x < T && y < T && (d[(y * T + x) * 4] < 140);
@@ -2277,18 +2287,19 @@ function pontos3D(cv, legenda){
       if (borda.length < 150) return ok(null);
       const o = [], nb = Math.round(N * .72);
       for (let i = 0; i < N; i++) { const l = i < nb ? borda : (miolo.length ? miolo : borda), p = l[Math.floor(((i < nb ? i : i - nb) * 0.6180339 % 1) * l.length)];
-        o.push([p[0] * .97, p[1] * .97, i < nb ? (i % 2 ? .05 : -.05) : (i % 2 ? .14 : -.14)]); }
+        o.push([p[0] * .97 * zoom, p[1] * .97 * zoom, i < nb ? (i % 2 ? .05 : -.05) : (i % 2 ? .14 : -.14)]); }
       ok(o); }; im.onerror = () => ok(null); im.src = src; });
   const brilho = Array.from({length: N}, (_, i) => (i * 7919) % 13 === 0); // algumas faíscas douradas
   const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
   const MUDA = 1500;
   let CENAS = [{f: esfera(), nome: '', parado: 2600}], w = 0, h = 0, dpr = 1, raf = 0, parar = false;
   let atual = 0, tCena = performance.now();
-  Promise.all([daImagem('img/aparecida.png'), daImagem('img/amparo.png')]).then(([ap, am]) => {
-    const formas = [{f: esfera(), nome: '', parado: 2200}, {f: anel(), nome: '', parado: 2200}, {f: cubo(), nome: '', parado: 2200}, {f: estrela(), nome: '', parado: 2200}];
+  // 24/11/2026 (pedido do Ramon): Aparecida → a nossa igreja (prédio da Matriz, sem a santa) → Nossa Senhora do Amparo
+  Promise.all([daImagem('img/aparecida.png'), daImagem('img/igreja.png', 1.08), daImagem('img/amparo.png')]).then(([ap, ig, am]) => {
     CENAS = [];
     if (ap) CENAS.push({f: ap, nome: 'Nossa Senhora Aparecida', parado: 4200, figura: true});
-    CENAS.push(...formas);
+    CENAS.push(ig ? {f: ig, nome: 'Paróquia Nossa Senhora do Amparo', parado: 3800, figura: true} : {f: esfera(), nome: '', parado: 2200});
+    CENAS.push({f: globo(), nome: '', parado: 3000}); // globo terrestre girando, depois da igreja
     if (am) CENAS.push({f: am, nome: 'Nossa Senhora do Amparo', parado: 4800, figura: true});
     tCena = performance.now(); atual = 0; mostraNome();
   });
