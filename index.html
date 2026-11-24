@@ -853,7 +853,7 @@ function seletorData(d, mudar){
 async function telaInicio(){
   topo('Paróquia','Nossa Senhora do Amparo');
   const insp = ler('inspiracao', '');
-  const podePascom = ['pascom','padre'].includes(sessao.papel);
+  const podePascom = ['pascom','padre','dizimo'].includes(sessao.papel);
   app.innerHTML = `<section class="tela">
     <div id="avisosPascom"></div>
     ${avisosDaSemana()}
@@ -963,7 +963,7 @@ function desenhaAvisosPascom(lista){
   const el = $('#avisosPascom'); if (!el) return;
   lista = lista || [];
   if (!lista.length) { el.innerHTML = ''; return; }
-  const pode = ['pascom','padre'].includes(sessao.papel);
+  const pode = ['pascom','padre','dizimo'].includes(sessao.papel);
   el.innerHTML = `<div class="avisos-pascom"><div class="rot">🔔 Avisos da paróquia</div>${lista.map(a => `<div class="ap ${esc(a.categoria)}"><div class="aviso-ic">${ICONE_AVISO[a.categoria] || '🔔'}</div><div style="flex:1;min-width:0">
       <b>${esc(a.titulo)}</b>${a.texto ? `<p>${esc(a.texto)}</p>` : ''}<small>${a.data ? 'Publicado em ' + new Date(a.data).toLocaleDateString('pt-BR') : ''}${a.ate ? ' · até ' + a.ate.split('-').reverse().slice(0,2).join('/') : ''}</small>
       ${pode ? `<div class="acoes"><button data-apagar="${esc(a.id)}">Tirar do app</button></div>` : ''}</div></div>`).join('')}</div>`;
@@ -978,7 +978,7 @@ const TIPOS_HORARIO = ['Missa','Confissão','Adoração','Terço','Secretaria'];
 function desenhaHorarios(lista, editar){
   const el = $('#horarios'); if (!el) return;
   lista = lista || [];
-  const pode = ['pascom','padre'].includes(sessao.papel);
+  const pode = ['pascom','padre','dizimo'].includes(sessao.papel);
   if (!lista.length && !pode) { el.innerHTML = ''; return; }
   if (editar) {
     const linha = h => `<div class="hed"><select class="campo">${TIPOS_HORARIO.map(t => `<option ${t === h.tipo ? 'selected' : ''}>${t}</option>`).join('')}</select>
